@@ -5,7 +5,9 @@ import { AiFillAudio } from "react-icons/ai";
 const CenterPart = () => {
   return (
     <>
-      <div className="w-[60%] flex justify-center items-center gap-6 bg-amber-300 h-[100dvh]">
+      <div className="w-[60%] mx-auto bg_gray h-[100dvh] !p-5">
+              <div className='flex items-center justify-center gap-10'>
+
               {/* Search Bar */}
               <div className="flex px-3 py-2 border-2 border-gray-400 rounded-full items-center w-full max-w-[400px]">
                 <IoMdSearch />
@@ -20,6 +22,7 @@ const CenterPart = () => {
               <button className="bg-gradient-to-br from-yellow-500 via-pink-500 to-purple-600 text-white px-4 py-3 rounded-full capitalize text-sm font-semibold">
                 create new post
               </button>
+              </div>
             </div>
     </>
   )
