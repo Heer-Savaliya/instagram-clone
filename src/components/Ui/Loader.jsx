@@ -19,22 +19,22 @@ const StyledWrapper = styled.div`
   .loading {
    --speed-of-animation: 0.9s;
    --gap: 6px;
-   --first-color: #4c86f9;
-   --second-color: #49a84c;
-   --third-color: #f6bb02;
-   --fourth-color: #f6bb02;
-   --fifth-color: #2196f3;
+   --first-color: #feda75;
+    --second-color: #fa7e1e;
+    --third-color: #d62976;
+    --fourth-color: #962fbf;
+    --fifth-color: #4f5bd5;
    display: flex;
    justify-content: center;
    align-items: center;
-   width: 100px;
+   width: 100%;
    gap: 6px;
-   height: 100px;
+   height: 100vh;
   }
 
   .loading span {
-   width: 4px;
-   height: 50px;
+   width: 5px;
+   height: 80px;
    background: var(--first-color);
    animation: scale var(--speed-of-animation) ease-in-out infinite;
   }

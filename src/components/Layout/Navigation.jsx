@@ -5,6 +5,7 @@ import { IoMdSettings, IoMdHelp } from "react-icons/io";
 import { TbWorldHeart } from "react-icons/tb";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 import { GrFavorite } from "react-icons/gr";
+import { PiVideoFill } from "react-icons/pi";
 
 const Navigation = () => {
   return (
@@ -51,6 +52,12 @@ const Navigation = () => {
                 <GrFavorite />
               </span>
               <NavLink>My Favourites</NavLink>
+            </li>
+            <li className="flex items-center gap-5 px-5 py-4 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all duration-300 ease-in-out">
+              <span>
+              <PiVideoFill />
+              </span>
+              <NavLink>Reels</NavLink>
             </li>
             <li className="flex items-center gap-5 px-5 py-4 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all duration-300 ease-in-out">
               <span>
