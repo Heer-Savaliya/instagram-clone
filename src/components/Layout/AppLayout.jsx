@@ -1,9 +1,7 @@
 import React from 'react'
-import { FaPaperPlane } from "react-icons/fa";
-import { IoMenu } from "react-icons/io5";
-import { MdNotificationsActive } from "react-icons/md";
 import Navigation from './Navigation';
 import CenterPart from './CenterPart';
+import RightPart from './RightPart';
 
 
 const AppLayout = () => {
@@ -17,11 +15,7 @@ const AppLayout = () => {
             <CenterPart />
     
             {/* Right Section - 1/3 Width */}
-            <div className="w-[25%] flex items-center justify-end gap-6">
-              <FaPaperPlane size={20} />
-              <MdNotificationsActive size={25} />
-              <IoMenu size={25} />
-            </div>
+           <RightPart />
           </div>
         </div>
       );
