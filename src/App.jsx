@@ -52,7 +52,7 @@ const App = () => {
     }
   ])
   return (
-    <div className='!p-5'>
+    <div>
       <RouterProvider router={router}></RouterProvider>
     </div>
   )
