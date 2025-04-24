@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Login from './pages/Login';
 import Registration from './pages/Registration';
 import AppLayout from './components/Layout/AppLayout';
@@ -52,8 +52,8 @@ const App = () => {
     }
   ])
   return (
-    <div>
-      <h1 className='text-red-600'>App</h1>
+    <div className='!p-5'>
+      <RouterProvider router={router}></RouterProvider>
     </div>
   )
 }

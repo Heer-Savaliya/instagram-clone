@@ -1,9 +1,17 @@
 import React from 'react'
+import { NavLink } from 'react-router-dom'
+import TopBar from '../Ui/TopBar'
 
 const Header = () => {
   return (
     <div>
-      <h1>header</h1>
+        <TopBar />
+      <nav>
+        <ul>
+            <li><NavLink to="/">Home</NavLink></li>
+            <li><NavLink to="/about">About</NavLink></li>
+        </ul>
+      </nav>
     </div>
   )
 }
