@@ -7,7 +7,7 @@ import RightPart from './RightPart';
 const AppLayout = () => {
     return (
         <div className="w-full bg-white">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between h-screen overflow-hidden">
             {/* Left Section - 1/3 Width */}
             <Navigation />
     

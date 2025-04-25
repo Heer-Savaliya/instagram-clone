@@ -30,7 +30,7 @@ const Navigation = () => {
               "0px 5px 10px rgba(0, 0, 0, 0.34)",
           }}
         
-        className="w-[15%] h-[100dvh] bg-white "
+        className="w-[15%] h-full fixed left-0 top-0 z-10 bg-white "
       >
         <div className="p-5">
           <img src="./images/logo.jpg" alt="Logo" className="h-[45px] w-full" />
