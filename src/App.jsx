@@ -29,9 +29,9 @@ const App = () => {
         {
           path:"/",
           element:(
-            // <PrivateRoute>
+            <PrivateRoute>
               <Home />
-            // </PrivateRoute>
+            </PrivateRoute>
           )
         },
         {

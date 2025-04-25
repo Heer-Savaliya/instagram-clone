@@ -1,5 +1,8 @@
+import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState, useEffect } from "react";
 import { FaFacebookF } from "react-icons/fa";
+import { NavLink, useNavigate } from "react-router-dom";
+import { auth } from "../firebaseConfig";
 
 const images = [
   "./images/dp.jpg",
@@ -10,9 +13,20 @@ const images = [
 
 const Login = () => {
   const [currentImage, setCurrentImage] = useState(0);
-  const [email ,setEmail]=useState("");
-  const [password,setPassword] = useState("");
-  const [error ,setError] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit=async(e) =>{
+    e.preventDefault();
+    try{
+      await signInWithEmailAndPassword(auth,email,password);
+      navigate("/");
+    }catch(err){
+      setError(err.message);
+    }
+  }
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -20,6 +34,7 @@ const Login = () => {
     }, 3000); // change image every 3 seconds
     return () => clearInterval(interval);
   }, []);
+
 
   return (
     <div className="min-h-screen bg-[#F8F5F8] flex justify-center items-center">
@@ -41,14 +56,15 @@ const Login = () => {
             className="h-[40px] mx-auto mb-5"
           />
 
-          <form className="flex flex-col gap-5">
-            
+          <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
             <div className="p-[2px] rounded-md bg-gray-300 focus-within:bg-gradient-to-r focus-within:from-yellow-400 focus-within:via-pink-500 focus-within:to-purple-600 transition-all duration-300">
               <div className="bg-white rounded-md">
                 <input
-                  type="text"
-                  placeholder="Phone number, username, or email"
+                  type="email"
+                  value={email}
+                  placeholder="Email"
                   className="w-full p-3 border-none rounded-md bg-white focus:outline-none"
+                  onChange={(e)=>setEmail(e.target.value)}
                 />
               </div>
             </div>
@@ -57,18 +73,21 @@ const Login = () => {
               <div className="bg-white rounded-md">
                 <input
                   type="password"
+                  value={password}
                   placeholder="Password"
                   className="w-full p-3 border-none rounded-md bg-white focus:outline-none"
+                  onChange={(e)=>setPassword(e.target.value)}
                 />
               </div>
             </div>
-            <button
-  type="submit"
-  className="w-full p-3 mb-4 bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 text-white rounded-md font-semibold shimmer-hover"
->
-  Log In
-</button>
 
+            {error && <p className="text-center text-sm text-bold text-red-500">{error}</p>}
+            <button
+              type="submit"
+              className="w-full p-3 mb-4 bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 text-white rounded-md font-semibold shimmer-hover"
+            >
+              Log In
+            </button>
           </form>
 
           <div className="flex items-center my-4">
@@ -91,9 +110,9 @@ const Login = () => {
           <div className="text-center">
             <span className="text-sm text-gray-500">
               Don't have an account?{" "}
-              <a href="#" className="text-sm text-blue-500 hover:underline">
+              <NavLink to="/register" className="text-sm text-blue-500 hover:underline">
                 Sign up
-              </a>
+              </NavLink>
             </span>
           </div>
         </div>
