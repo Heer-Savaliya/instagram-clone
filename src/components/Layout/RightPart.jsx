@@ -6,7 +6,7 @@ import { MdNotificationsActive } from "react-icons/md";
 const RightPart = () => {
   return (
     <>
-       <div className="w-[25%] p-5 bg-red-100 h-[100dvh]">
+       <div className="w-[25%] p-5 bg-white h-[100dvh]">
 
         <div className='flex items-center justify-end gap-14'>
               <FaPaperPlane size={20} />

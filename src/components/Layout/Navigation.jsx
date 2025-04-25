@@ -50,7 +50,7 @@ const Navigation = () => {
               <span>
                 <FaUserCircle />
               </span>
-              <NavLink>Profile</NavLink>
+              <NavLink to="/profile">Profile</NavLink>
             </li>
 
             <li className="flex items-center gap-5 px-5 py-4 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all duration-300 ease-in-out">

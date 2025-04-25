@@ -5,10 +5,11 @@ import Registration from './pages/Registration';
 import AppLayout from './components/Layout/AppLayout';
 import Home from './pages/Home';
 import About from './pages/About';
-import Contact from './pages/Contact';
 import Message from './pages/Message';
 import Loader from './components/Ui/Loader';
 import PrivateRoute from './route/PrivateRoute';
+import AddPost from './pages/AddPost';
+import Profile from './pages/Profile';
 
 const App = () => {
   const [loading,setLoading] = useState(true);
@@ -43,10 +44,10 @@ const App = () => {
           )
         },
         {
-          path:"/reel",
+          path:"/profile",
           element:(
             <PrivateRoute>
-              <Contact />
+              <Profile />
             </PrivateRoute>
           )
         },
@@ -55,6 +56,14 @@ const App = () => {
           element:(
             <PrivateRoute>
               <Message />
+            </PrivateRoute>
+          )
+        },
+        {
+          path:"/add-post",
+          element:(
+            <PrivateRoute>
+              <AddPost />
             </PrivateRoute>
           )
         },
