@@ -25,7 +25,7 @@ const CenterPart = () => {
         </div>
 
 
-        <div>
+        <div className="px-15 pt-10">
             <Outlet />
         </div>
       </div>

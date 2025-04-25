@@ -1,20 +1,33 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { FaHome, FaUserCircle } from "react-icons/fa";
 import { IoMdSettings, IoMdHelp } from "react-icons/io";
 import { TbWorldHeart } from "react-icons/tb";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 import { GrFavorite } from "react-icons/gr";
 import { PiVideoFill } from "react-icons/pi";
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebaseConfig";
 
 const Navigation = () => {
+  const navigate = useNavigate();
+  const hnadleLogout = async () =>{
+    try{
+      await signOut(auth);
+      navigate("/login");
+    }catch(error){
+      console.log("Logout error : ",error);
+      
+    }
+  };
+
   return (
     <>
       {/* Left Section - 1/3 Width */}
       <div
           style={{
             boxShadow:
-              "rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px",
+              "0px 5px 10px rgba(0, 0, 0, 0.34)",
           }}
         
         className="w-[15%] h-[100dvh] bg-white "
@@ -72,7 +85,7 @@ const Navigation = () => {
               <NavLink>Settings</NavLink>
             </li>
 
-            <li className="flex items-center gap-5 px-5 py-4 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all duration-300 ease-in-out">
+            <li onClick={hnadleLogout} className="flex items-center gap-5 px-5 py-4 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all duration-300 ease-in-out">
               <span>
                 <RiLogoutCircleRLine />
               </span>
