@@ -41,7 +41,7 @@ const FeedCard = () => {
             <img
               src="./images/feed10.jpg"
               alt=""
-              className="rounded-[7px]"
+              className="rounded-[7px] w-full"
             />
           </div>
 
@@ -89,9 +89,9 @@ const FeedCard = () => {
           <div className="flex justify-between items-center">
             <div className="flex gap-4">
               <img
-                src="./images/p1.jpg"
+                src="./images/p2.jpg"
                 alt=""
-                className="w-[45px] rounded-full"
+                className="w-[45px] rounded-full "
               />
               <div>
                 <h2 className="text-[16px] font-semibold capitalize">
@@ -111,9 +111,9 @@ const FeedCard = () => {
 
           <div>
             <img
-              src="./images/feed10.jpg"
+              src="./images/feed3.jpg"
               alt=""
-              className="rounded-[7px]"
+              className="rounded-[7px] w-full"
             />
           </div>
 
