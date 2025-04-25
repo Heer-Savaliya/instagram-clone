@@ -38,9 +38,9 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-[#F8F5F8] flex justify-center items-center">
-      <div className="bg-white p-10 rounded-lg shadow-lg w-auto flex gap-10">
+      <div className="bg-white mx-10 p-2 md:p-7 rounded-lg shadow-none md:shadow-lg w-full max-w-5xl flex items-center gap-3 md:gap-8">
         {/* Image Slider */}
-        <div className="w-[450px] h-[500px] overflow-hidden rounded-3xl relative">
+        <div className="w-[300px] h-[450px] lg:w-[420px] lg:h-[550px] hidden md:block  overflow-hidden rounded-3xl relative">
           <img
             src={images[currentImage]}
             alt="slider"
@@ -49,7 +49,7 @@ const Login = () => {
         </div>
 
         {/* Login Form */}
-        <div className="w-[450px] bg-white p-10 flex-1">
+        <div className="w-[450px] bg-white p-6 lg:p-10 flex-1">
           <img
             src="./images/logo.jpg"
             alt=""
@@ -81,16 +81,16 @@ const Login = () => {
               </div>
             </div>
 
-            {error && <p className="text-center text-sm text-bold text-red-500">{error}</p>}
+            {error && <p className="text-center text-sm font-semibold text-red-500">{error}</p>}
             <button
               type="submit"
-              className="w-full p-3 mb-4 bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 text-white rounded-md font-semibold shimmer-hover"
+              className="w-full p-3 mb-2 md:mb-4 bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 text-white rounded-md font-semibold shimmer-hover"
             >
               Log In
             </button>
           </form>
 
-          <div className="flex items-center my-4">
+          <div className="flex items-center my-2 md:my-4">
             <div className="flex-1 h-px bg-gray-300"></div>
             <span className="px-3 text-gray-500">OR</span>
             <div className="flex-1 h-px bg-gray-300"></div>
@@ -101,7 +101,7 @@ const Login = () => {
             Log in with Facebook
           </button>
 
-          <div className="text-center mb-6">
+          <div className="text-center mb-3 md:mb-6">
             <a href="#" className="text-sm text-blue-500 hover:underline">
               Forgot password?
             </a>
