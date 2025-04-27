@@ -15,7 +15,7 @@ const Status = () => {
       {/* status */}
       <div className="py-5 flex gap-4">
         <div className="text-center">
-          <div className="relative inline-block p-1 bg-gradient-to-br from-pink-500 via-yellow-500 to-purple-600 rounded-full">
+          <div className="relative inline-block p-[3px] bg-gradient-to-br from-yellow-500 via-pink-500 to-purple-600 rounded-full">
             <img
               src="./images/p1.jpg"
               alt=""
@@ -28,7 +28,7 @@ const Status = () => {
         </div>
 
         <div className="text-center">
-  <div className="relative inline-block p-1 bg-gradient-to-br from-pink-500 via-yellow-500 to-purple-500 rounded-full">
+  <div className="relative inline-block p-[3px]  bg-gradient-to-br from-yellow-500 via-pink-500 to-purple-600 rounded-full">
     <img
       src="./images/p1.jpg"
       alt=""
