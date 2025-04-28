@@ -144,7 +144,7 @@ const Registration = () => {
             </div>
           </div>
 
-          {/* Last Row (Single Field) */}
+          
           <div className="p-[2px] rounded-md bg-gray-300 focus-within:bg-gradient-to-r focus-within:from-yellow-400 focus-within:via-pink-500 focus-within:to-purple-600 transition-all duration-300">
             <div className="bg-white rounded-md flex items-center !px-3">
             <FaImages size={20} className="text-gray-500"/>
