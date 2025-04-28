@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { IoHeartOutline ,IoShareSocialSharp ,IoBookmarksOutline } from "react-icons/io5";
 import { LuMessageCircleHeart } from "react-icons/lu";
 import { BsThreeDots } from "react-icons/bs";
-import { collection, getDoc ,doc, getDocs } from "firebase/firestore";
+import { collection, getDoc ,doc, getDocs ,addDoc} from "firebase/firestore";
 import {  auth,firestore } from '../../firebaseConfig';
 import { getAuth } from "firebase/auth";
 
@@ -78,7 +78,7 @@ const FeedCard = () => {
           const postsWithUser = await Promise.all(
             querySnapshot.docs.map(async (docSnap) => {
               const postData = docSnap.data();
-              let userData = { fullname: "Unknown", profile: "./images/p1.jpg" };
+              let userData = { fullname: "Unknown", profile: "./images/default_p.jpg" };
 
               if (postData.user_id) {
                 const userDoc = await getDoc(doc(firestore, "users", postData.user_id));
@@ -86,7 +86,7 @@ const FeedCard = () => {
                   const userInfo = userDoc.data();
                   userData = {
                     fullname: userInfo.fullname || "Unknown",
-                    profile: userInfo.profile || "./images/p1.jpg",
+                    profile: userInfo.profile || "./images/default_p.jpg",
                   };
                 }
               }
@@ -107,18 +107,48 @@ const FeedCard = () => {
       }
     };
 
+
+    
+    
     fetchPosts();
   }, []);
-
+  
   if (loading) {
     return <div>Loading posts...</div>;
+  }
+  
+  // sorting
+  const sortedPost = Array.isArray(postItems) ?
+  [...postItems].sort((a,b)=>{
+    if(!a.createdAt || !b.createdAt) return 0;
+    return b.createdAt.seconds - a.createdAt.seconds;
+  }) : [];
+  
+
+  const addToLike = async (item) =>{
+    const user = auth.currentUser;
+    if(!user){
+      console.log("Please log in to like the post");
+      return;
+    }
+    try{
+      await addDoc(collection(firestore,"posts",item.id,"likes"),{
+        usrId:user.uid,
+        likedAt: new Date(),
+      });
+      console.log("Post liked successfully");
+      
+    }catch(error){
+      console.error("Error adding like : ",error);
+      
+    }
   }
 
   
   return (
     <>
 
-    {postItems.map(item =>(
+    {sortedPost.map(item =>(
 
     
       <div key={item.id}
@@ -162,7 +192,7 @@ const FeedCard = () => {
           {/* Likes */}
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2 text-gray-600 ">
-              <IoHeartOutline className="text-xl" />
+              <IoHeartOutline className="text-xl" onClick={()=>addToLike(item)}/>
               <p className="text-[16px] font-medium">
                 <span className="font-bold">24</span> Likes
               </p>
