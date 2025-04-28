@@ -10,6 +10,7 @@ import Loader from './components/Ui/Loader';
 import PrivateRoute from './route/PrivateRoute';
 import AddPost from './pages/AddPost';
 import Profile from './pages/Profile';
+import Favourites from './pages/Favourites';
 
 const App = () => {
   const [loading,setLoading] = useState(true);
@@ -48,6 +49,14 @@ const App = () => {
           element:(
             <PrivateRoute>
               <Profile />
+            </PrivateRoute>
+          )
+        },
+        {
+          path:"/favourite",
+          element:(
+            <PrivateRoute>
+              <Favourites />
             </PrivateRoute>
           )
         },
