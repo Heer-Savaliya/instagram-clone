@@ -151,7 +151,7 @@ const Registration = () => {
               <input
                 type="file"
                 name="profile"
-                placeholder="Referral Code (Optional)"
+                placeholder="Profile image"
                 className="w-full p-3 rounded-md bg-white focus:outline-none"
                 onChange={handleChange}
               />

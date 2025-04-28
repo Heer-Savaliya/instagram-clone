@@ -1,27 +1,24 @@
 import React, { useState } from "react";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
 import { auth, firestore } from "../firebaseConfig";
 import { addDoc, collection } from "firebase/firestore";
 
 const AddPost = () => {
-
-  const [error,setError] = useState();
+  const [error, setError] = useState();
   const navigate = useNavigate();
-  const storage = getStorage();
 
-  const [addPost,setAddPost]=useState({
+  const [addPost, setAddPost] = useState({
     caption: "",
-    post :"",
-    description : "",
-  })
+    post: "", // This will now be a URL (string)
+    description: "",
+  });
 
   const handleChange = (e) => {
     if (e.target.name === "post") {
-      // Handling the file input separately
+      // Handling the image URL input separately (no file upload logic here)
       setAddPost({
         ...addPost,
-        post: e.target.files[0], // Set the selected file
+        post: e.target.value, // Directly set the URL
       });
     } else {
       // For text inputs (caption, description)
@@ -31,41 +28,39 @@ const AddPost = () => {
       });
     }
   };
-   
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
+    // Validate if the URL is not empty
     if (!addPost.post) {
-      setError("Please select an image file!");
+      setError("Please provide an image URL!");
       return;
     }
-  
+
     const user = auth.currentUser;
-  
+
     if (!user) {
       setError("User not logged in!");
       return;
     }
-  
+
     try {
-    
-      // Store post details in Firestore
+      // Store post details in Firestore, including the image URL
       await addDoc(collection(firestore, "users", user.uid, "posts"), {
-        caption,
-        description,      
-        post, // Firebase Storage URL will be used here
+        caption: addPost.caption,
+        description: addPost.description,
+        post: addPost.post, // Directly save the image URL here
         createdAt: new Date(),
       });
-  
-      navigate("/"); 
+
+      navigate("/"); // Navigate to the home page or another page after the post is added
     } catch (err) {
       console.error(err);
       setError("Failed to upload post. Please try again.");
     }
   };
-  
-  
+
   return (
     <div>
       <div className="shadow-2xl py-10 px-15">
@@ -78,7 +73,7 @@ const AddPost = () => {
                 htmlFor="caption"
                 className="text-gray-700 capitalize font-serif"
               >
-                Caption :{" "}
+                Caption:{" "}
               </label>
               <input
                 className="p-2 mt-1 border-2 w-full border-gray-400 rounded-lg capitalize"
@@ -94,13 +89,13 @@ const AddPost = () => {
                 htmlFor="post"
                 className="text-gray-700 capitalize font-serif"
               >
-                Post :{" "}
+                Image URL:{" "}
               </label>
               <input
                 className="p-2 mt-1 border-2 w-full text-gray-500 border-gray-400 rounded-lg capitalize"
-                type="file"
+                type="text"
                 name="post"
-                placeholder="Add post"
+                placeholder="Enter image URL"
                 id="post"
                 onChange={handleChange}
               />
@@ -112,7 +107,7 @@ const AddPost = () => {
               htmlFor="description"
               className="text-gray-700 capitalize font-serif"
             >
-              Description :{" "}
+              Description:{" "}
             </label>
             <textarea
               className="p-2 mt-1 border-2 w-full  border-gray-400 rounded-lg capitalize"
@@ -125,12 +120,14 @@ const AddPost = () => {
             />
           </div>
 
+          {error && <p className="text-red-500">{error}</p>}
+
           <button
-              type="submit"
-              className="w-full cursor-pointer p-3 mb-2 md:mb-4 bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 text-white rounded-md font-semibold shimmer-hover"
-            >
-              Add post
-            </button>
+            type="submit"
+            className="w-full cursor-pointer p-3 mb-2 md:mb-4 bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 text-white rounded-md font-semibold shimmer-hover"
+          >
+            Add post
+          </button>
         </form>
       </div>
     </div>
