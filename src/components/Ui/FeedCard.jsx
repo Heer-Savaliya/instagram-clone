@@ -91,10 +91,13 @@ const FeedCard = () => {
                 }
               }
 
+              const likeSnapshot = await getDocs(collection(firestore,"posts",docSnap.id,"likes"));
+              const likesCount = likeSnapshot.size;
               return {
                 id: docSnap.id,
                 ...postData,
                 user: userData,
+                likesCount: likesCount,
               };
             })
           );
@@ -136,6 +139,18 @@ const FeedCard = () => {
         usrId:user.uid,
         likedAt: new Date(),
       });
+
+      setPostItems(prevItems =>
+        prevItems.map(post =>
+          post.id === item.id
+            ? {
+                ...post,
+                likesCount: post.likesCount + 1,
+                likedByCurrentUser: true,
+              }
+            : post
+        )
+      );
       console.log("Post liked successfully");
       
     }catch(error){
@@ -144,7 +159,8 @@ const FeedCard = () => {
     }
   }
 
-  
+
+
   return (
     <>
 
@@ -192,9 +208,9 @@ const FeedCard = () => {
           {/* Likes */}
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2 text-gray-600 ">
-              <IoHeartOutline className="text-xl" onClick={()=>addToLike(item)}/>
+              <IoHeartOutline className={`text-xl cursor-pointer ${item.likedByCurrentUser ? "text-red-500" : "text-gray-500"}`} onClick={()=>addToLike(item)}/>
               <p className="text-[16px] font-medium">
-                <span className="font-bold">24</span> Likes
+                <span className="font-bold">{item.likesCount}</span> Likes
               </p>
             </div>
             <div className="flex items-center gap-2 text-gray-600">

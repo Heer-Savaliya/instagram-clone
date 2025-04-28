@@ -59,7 +59,6 @@ const AddPost = () => {
       const postsCollection = collection(firestore, "posts");
 
     await addDoc(postsCollection, {
-      id:post.id,
       user_id: user.uid, // store user's ID
       caption: addPost.caption,
       description: addPost.description,
