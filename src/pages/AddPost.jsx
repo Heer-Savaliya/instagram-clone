@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth, firestore } from "../firebaseConfig";
-import { addDoc, collection } from "firebase/firestore";
+import { auth, firestore } from "../firebaseConfig"; // No need to import 'storage' now
+import { addDoc, collection ,doc } from "firebase/firestore";
+import axios from "axios"; // We'll use axios to upload to Cloudinary
 
 const AddPost = () => {
   const [error, setError] = useState();
@@ -9,19 +10,17 @@ const AddPost = () => {
 
   const [addPost, setAddPost] = useState({
     caption: "",
-    post: "", // This will now be a URL (string)
+    post: null, // Storing the file object
     description: "",
   });
 
   const handleChange = (e) => {
     if (e.target.name === "post") {
-      // Handling the image URL input separately (no file upload logic here)
       setAddPost({
         ...addPost,
-        post: e.target.value, // Directly set the URL
+        post: e.target.files[0],
       });
     } else {
-      // For text inputs (caption, description)
       setAddPost({
         ...addPost,
         [e.target.name]: e.target.value,
@@ -32,9 +31,8 @@ const AddPost = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate if the URL is not empty
     if (!addPost.post) {
-      setError("Please provide an image URL!");
+      setError("Please upload an image!");
       return;
     }
 
@@ -46,15 +44,30 @@ const AddPost = () => {
     }
 
     try {
-      // Store post details in Firestore, including the image URL
-      await addDoc(collection(firestore, "users", user.uid, "posts"), {
-        caption: addPost.caption,
-        description: addPost.description,
-        post: addPost.post, // Directly save the image URL here
-        createdAt: new Date(),
-      });
+      // Upload image to Cloudinary
+      const formData = new FormData();
+      formData.append("file", addPost.post);
+      formData.append("upload_preset", "myuploadpreset"); // Replace with your Cloudinary preset name
 
-      navigate("/"); // Navigate to the home page or another page after the post is added
+      const cloudinaryResponse = await axios.post(
+        "https://api.cloudinary.com/v1_1/dxctlq87l/image/upload", // Replace 'your_cloud_name'
+        formData
+      );
+
+      const imageUrl = cloudinaryResponse.data.secure_url;
+
+      const postsCollection = collection(firestore, "posts");
+
+    await addDoc(postsCollection, {
+      user_id: user.uid, // store user's ID
+      caption: addPost.caption,
+      description: addPost.description,
+      post: imageUrl,
+      createdAt: new Date(),
+    });
+
+
+      navigate("/"); // Navigate after success
     } catch (err) {
       console.error(err);
       setError("Failed to upload post. Please try again.");
@@ -69,10 +82,7 @@ const AddPost = () => {
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <div className="flex gap-6 items-center">
             <div className="flex-1/2">
-              <label
-                htmlFor="caption"
-                className="text-gray-700 capitalize font-serif"
-              >
+              <label htmlFor="caption" className="text-gray-700 capitalize font-serif">
                 Caption:{" "}
               </label>
               <input
@@ -85,17 +95,13 @@ const AddPost = () => {
               />
             </div>
             <div className="flex-1/2">
-              <label
-                htmlFor="post"
-                className="text-gray-700 capitalize font-serif"
-              >
-                Image URL:{" "}
+              <label htmlFor="post" className="text-gray-700 capitalize font-serif">
+                Upload Image:{" "}
               </label>
               <input
                 className="p-2 mt-1 border-2 w-full text-gray-500 border-gray-400 rounded-lg capitalize"
-                type="text"
+                type="file"
                 name="post"
-                placeholder="Enter image URL"
                 id="post"
                 onChange={handleChange}
               />
@@ -103,15 +109,11 @@ const AddPost = () => {
           </div>
 
           <div className="flex-1/2">
-            <label
-              htmlFor="description"
-              className="text-gray-700 capitalize font-serif"
-            >
+            <label htmlFor="description" className="text-gray-700 capitalize font-serif">
               Description:{" "}
             </label>
             <textarea
-              className="p-2 mt-1 border-2 w-full  border-gray-400 rounded-lg capitalize"
-              type="text"
+              className="p-2 mt-1 border-2 w-full border-gray-400 rounded-lg capitalize"
               name="description"
               placeholder="Add description"
               id="description"

@@ -36,6 +36,7 @@ const Registration = () => {
 
       // store in database
       await setDoc(doc(firestore,"users",user.uid),{
+        user_id:user.uid,
           fullname,
           username,
           email,
