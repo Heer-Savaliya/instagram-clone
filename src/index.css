@@ -56,6 +56,16 @@
   border: 2px solid #f3f4f6;
 }
 
+/* In your CSS (e.g., index.css or global.css) */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
 button,a,li{
   cursor: pointer;
 }
