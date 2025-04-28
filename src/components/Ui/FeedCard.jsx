@@ -3,53 +3,118 @@ import { IoHeartOutline ,IoShareSocialSharp ,IoBookmarksOutline } from "react-ic
 import { LuMessageCircleHeart } from "react-icons/lu";
 import { BsThreeDots } from "react-icons/bs";
 import { collection, getDoc ,doc, getDocs } from "firebase/firestore";
-import {  firestore } from '../../firebaseConfig';
-
+import {  auth,firestore } from '../../firebaseConfig';
+import { getAuth } from "firebase/auth";
 
 const FeedCard = () => {
-  const [postItems,setPostItems] =useState([]);
+  // const [postItems,setPostItems] =useState([]);
 
-  useEffect(()=>{
-    const fetchPosts = async()=>{
-      try{
+  // useEffect(() => {
+  //   const fetchPosts = async () => {
+  //     const user = auth.currentUser;
+  //     if (!user) {
+  //       console.error("User is not authenticated.");
+  //       return;
+  //     }
+  
+  //     try {
+  //       const querySnapshot = await getDocs(collection(firestore, "posts"));
+  //       if (querySnapshot.empty) {
+  //         console.log("No posts found in Firestore");
+  //       }
+  //       const postsWithUser = await Promise.all(
+  //         querySnapshot.docs.map(async (docSnap) => {
+  //           const postData = docSnap.data();
+  //           let userData = { fullname: "Unknown", profilePic: "./images/p1.jpg" };
+  
+  //           if (postData.user_id) {
+  //             const userDoc = await getDoc(doc(firestore, "users", postData.user_id));
+  //             if (userDoc.exists()) {
+  //               const userInfo = userDoc.data();
+  //               userData = {
+  //                 fullname: userInfo.fullname || "Unknown",
+  //                 profilePic: userInfo.profileImage || "./images/p1.jpg",
+  //               };
+  //             }
+  //           }
+  
+  //           return {
+  //             id: docSnap.id,
+  //             ...postData,
+  //             user: userData,
+  //           };
+  //         })
+  //       );
+  //       setPostItems(postsWithUser);
+  //     } catch (error) {
+  //       console.error("Error fetching the posts:", error);
+  //     }
+  //   };
+  
+  //   fetchPosts();
+  // }, []);
+
+  const [postItems, setPostItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      // Check if the user is logged in
+      if (!user) {
+        console.log("User is not authenticated.");
+        setLoading(false);
+        return; 
+      }
+
+      try {
+        // Fetch posts from Firestore
         const querySnapshot = await getDocs(collection(firestore, "posts"));
         if (querySnapshot.empty) {
           console.log("No posts found in Firestore");
-        }
-        const postsWithUser = await Promise.all(
-          querySnapshot.docs.map(async (docSnap) => {
-            const postData = docSnap.data();
-            let userData = { fullname: "Unknown", profilePic: "./images/p1.jpg" };
+        } else {
+          const postsWithUser = await Promise.all(
+            querySnapshot.docs.map(async (docSnap) => {
+              const postData = docSnap.data();
+              let userData = { fullname: "Unknown", profile: "./images/p1.jpg" };
 
-            if (postData.user_id) {
-              const userDoc = await getDoc(doc(firestore, "users", postData.user_id));
-              if (userDoc.exists()) {
-                const userInfo = userDoc.data();
-                userData = {
-                  fullname: userInfo.fullname || "Unknown",
-                  profilePic: userInfo.profileImage || "./images/p1.jpg",
-                };
+              if (postData.user_id) {
+                const userDoc = await getDoc(doc(firestore, "users", postData.user_id));
+                if (userDoc.exists()) {
+                  const userInfo = userDoc.data();
+                  userData = {
+                    fullname: userInfo.fullname || "Unknown",
+                    profile: userInfo.profile || "./images/p1.jpg",
+                  };
+                }
               }
-            }
 
-            return {
-              id: docSnap.id,
-              ...postData,
-              user: userData,
-            };
-          })
-        );
-        console.log(postItems);
-        console.log(postsWithUser);
-        
-        setPostItems(postsWithUser);
-      }catch(error){
-        console.error("Error fetching the posts : " ,error);
+              return {
+                id: docSnap.id,
+                ...postData,
+                user: userData,
+              };
+            })
+          );
+          setPostItems(postsWithUser);
+        }
+      } catch (error) {
+        console.error("Error fetching the posts:", error);
+      } finally {
+        setLoading(false);
       }
-    }
+    };
 
     fetchPosts();
-  },[])
+  }, []);
+
+  if (loading) {
+    return <div>Loading posts...</div>;
+  }
+
+  
   return (
     <>
 
@@ -66,7 +131,7 @@ const FeedCard = () => {
           <div className="flex justify-between items-center">
             <div className="flex gap-4">
               <img
-                src="./images/p1.jpg"
+                src={item.user.profile}
                 alt=""
                 className="w-[45px] rounded-full"
               />

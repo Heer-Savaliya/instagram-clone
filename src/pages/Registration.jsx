@@ -6,6 +6,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, firestore } from "../firebaseConfig";
+import axios from "axios"; 
 
 const Registration = () => {
   const [error,setError]=useState();
@@ -16,40 +17,60 @@ const Registration = () => {
     email: "",
     phone: "",
     password: "",
-    profile: "",
+    profile: null,
   });
 
   const handleChange = (e)=>{
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-  const handleSubmit =async(e)=>{
-    e.preventDefault();
-    const {fullname,username,email,phone,password,profile} = formData;
-    
-    try{
-      // create auth
-      const userCredential = await createUserWithEmailAndPassword(auth ,email,password);
-      const user=userCredential.user;
-
-      // store in database
-      await setDoc(doc(firestore,"users",user.uid),{
-        user_id:user.uid,
-          fullname,
-          username,
-          email,
-          phone:Number(phone),
-          profile,
+    if (e.target.name === "profile"){
+      setFormData({
+        ...formData,
+        profile: e.target.files[0],
       });
-
-      alert("New user registered ");
+    }else{
+      setFormData({
+        ...formData,
+        [e.target.name]: e.target.value,
+      });
+    }
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { fullname, username, email, phone, password, profile } = formData;
+  
+    try {
+      // Create user authentication
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+  
+      // Upload image to Cloudinary
+      const formData = new FormData();
+      formData.append("file", profile);
+      formData.append("upload_preset", "myuploadpreset"); // Make sure this matches your preset
+  
+      const cloudinaryResponse = await axios.post(
+        "https://api.cloudinary.com/v1_1/dxctlq87l/image/upload", // Replace with your actual Cloudinary cloud name
+        formData
+      );
+  
+      const imageUrl = cloudinaryResponse.data.secure_url;
+  
+      // Store user in Firestore
+      await setDoc(doc(firestore, "users", user.uid), {
+        user_id: user.uid,
+        fullname,
+        username,
+        email,
+        phone: Number(phone),
+        profile: imageUrl,
+      });
+  
+      alert("New user registered successfully.");
       navigate("/login");
-    }catch(err){
+    } catch (err) {
       setError(err.message);
     }
-  }
+  };
+  
 
   return (
     <div className="min-h-screen bg-[#F8F5F8] flex justify-center items-center px-4">

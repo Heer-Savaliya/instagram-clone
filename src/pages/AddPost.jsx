@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth, firestore } from "../firebaseConfig"; // No need to import 'storage' now
+import { auth, firestore } from "../firebaseConfig";
 import { addDoc, collection ,doc } from "firebase/firestore";
-import axios from "axios"; // We'll use axios to upload to Cloudinary
+import axios from "axios"; 
 
 const AddPost = () => {
   const [error, setError] = useState();
@@ -10,7 +10,7 @@ const AddPost = () => {
 
   const [addPost, setAddPost] = useState({
     caption: "",
-    post: null, // Storing the file object
+    post: null, 
     description: "",
   });
 
