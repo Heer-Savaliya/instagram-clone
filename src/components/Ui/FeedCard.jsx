@@ -7,52 +7,6 @@ import {  auth,firestore } from '../../firebaseConfig';
 import { getAuth } from "firebase/auth";
 
 const FeedCard = () => {
-  // const [postItems,setPostItems] =useState([]);
-
-  // useEffect(() => {
-  //   const fetchPosts = async () => {
-  //     const user = auth.currentUser;
-  //     if (!user) {
-  //       console.error("User is not authenticated.");
-  //       return;
-  //     }
-  
-  //     try {
-  //       const querySnapshot = await getDocs(collection(firestore, "posts"));
-  //       if (querySnapshot.empty) {
-  //         console.log("No posts found in Firestore");
-  //       }
-  //       const postsWithUser = await Promise.all(
-  //         querySnapshot.docs.map(async (docSnap) => {
-  //           const postData = docSnap.data();
-  //           let userData = { fullname: "Unknown", profilePic: "./images/p1.jpg" };
-  
-  //           if (postData.user_id) {
-  //             const userDoc = await getDoc(doc(firestore, "users", postData.user_id));
-  //             if (userDoc.exists()) {
-  //               const userInfo = userDoc.data();
-  //               userData = {
-  //                 fullname: userInfo.fullname || "Unknown",
-  //                 profilePic: userInfo.profileImage || "./images/p1.jpg",
-  //               };
-  //             }
-  //           }
-  
-  //           return {
-  //             id: docSnap.id,
-  //             ...postData,
-  //             user: userData,
-  //           };
-  //         })
-  //       );
-  //       setPostItems(postsWithUser);
-  //     } catch (error) {
-  //       console.error("Error fetching the posts:", error);
-  //     }
-  //   };
-  
-  //   fetchPosts();
-  // }, []);
 
   const [postItems, setPostItems] = useState([]);
   const [loading, setLoading] = useState(true);

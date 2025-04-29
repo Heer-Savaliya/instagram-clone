@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, deleteDoc,doc } from "firebase/firestore";
 import { UserContext } from "../../context/UserContext"; // adjust path as needed
 import { firestore } from "../../firebaseConfig";
+import { MdAutoDelete } from "react-icons/md";
 
 const AllPost = () => {
   const { userData } = useContext(UserContext);
@@ -37,6 +38,17 @@ const AllPost = () => {
     return <p className="text-center">Loading posts...</p>;
   }
 
+  const handleDelete =async(postId)=>{
+    try{
+      await deleteDoc(doc(firestore,"posts",postId));
+      setPosts(prev => prev.filter(posts => posts.id !== postId));
+      alert("Deleted");
+    }catch(error){
+      console.error("Error while deleteting post : ",error);
+      
+    }
+  }
+
   return (
     <div>
       <h1 className="text-xl font-bold mb-4">Your Posts</h1>
@@ -45,12 +57,18 @@ const AllPost = () => {
       ) : (
         <div className="grid grid-cols-3 gap-4">
           {posts.map((post) => (
-            <div key={post.id}>
+            <div key={post.id} className="relative group overflow-hidden rounded-2xl">
               <img
                 src={post.post} // assuming post has imageUrl field
                 alt="Post"
-                className="rounded-2xl object-cover w-full h-52"
+                className="rounded-2xl object-cover w-full h-52 transition-transform duration-300 group-hover:scale-105"
               />
+              <button
+              onClick={()=>handleDelete(post.id)}
+                className="absolute inset-0 bg-black bg-opacity-50 flex items-center gap-2 justify-center text-white font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              >
+                <MdAutoDelete />Delete
+              </button>
             </div>
           ))}
         </div>
