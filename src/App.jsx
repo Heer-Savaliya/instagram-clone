@@ -12,8 +12,10 @@ import AddPost from './pages/AddPost';
 import Profile from './pages/Profile';
 import Favourites from './pages/Favourites';
 
+
 const App = () => {
   const [loading,setLoading] = useState(true);
+
 
   const router = createBrowserRouter([
     {
@@ -26,7 +28,7 @@ const App = () => {
     },
     {
       path:'/',
-      element:<AppLayout />,
+      element:<AppLayout/>,
       children:[
         {
           path:"/",
@@ -48,7 +50,7 @@ const App = () => {
           path:"/profile",
           element:(
             <PrivateRoute>
-              <Profile />
+              <Profile/>
             </PrivateRoute>
           )
         },

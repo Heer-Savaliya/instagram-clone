@@ -8,6 +8,7 @@ import { GrFavorite } from "react-icons/gr";
 import { PiVideoFill } from "react-icons/pi";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
+import UserProfile from "./UserProfile";
 
 const Navigation = () => {
   const navigate = useNavigate();
@@ -32,60 +33,56 @@ const Navigation = () => {
         
         className="w-[15%] h-full fixed left-0 top-0 z-10 bg-white "
       >
-        <div className="p-5">
-          <img src="./images/logo.jpg" alt="Logo" className="h-[45px] w-full" />
+        <div className="p-5 flex items-center justify-center">
+          <img src="./images/logo.jpg" alt="Logo" className="w-[140px]" />
         </div>
 
+          {/* User profile */}
+          <UserProfile/>
+
         {/* main nav */}
-        <nav className="!mt-10 text-black font-semibold ">
+        <nav className="!mt-5 text-black font-semibold ">
           <ul className="">
-            <li className="flex items-center gap-5 px-5 py-4 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all duration-300 ease-in-out">
+            <li className="flex items-center gap-5 px-5 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all duration-300 ease-in-out">
               <span>
                 <FaHome />
               </span>
               <NavLink>Home</NavLink>
             </li>
 
-            <li className="flex items-center gap-5 px-5 py-4 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all duration-300 ease-in-out">
-              <span>
-                <FaUserCircle />
-              </span>
-              <NavLink to="/profile">Profile</NavLink>
-            </li>
-
-            <li className="flex items-center gap-5 px-5 py-4 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all duration-300 ease-in-out">
+            <li className="flex items-center gap-5 px-5 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all duration-300 ease-in-out">
               <span>
                 <TbWorldHeart />
               </span>
               <NavLink>Explore</NavLink>
             </li>
 
-            <li className="flex items-center gap-5 px-5 py-4 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all duration-300 ease-in-out">
+            <li className="flex items-center gap-5 px-5 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all duration-300 ease-in-out">
               <span>
                 <GrFavorite />
               </span>
               <NavLink to="/favourite">My Favourites</NavLink>
             </li>
-            <li className="flex items-center gap-5 px-5 py-4 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all duration-300 ease-in-out">
+            <li className="flex items-center gap-5 px-5 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all duration-300 ease-in-out">
               <span>
               <PiVideoFill />
               </span>
               <NavLink>Reels</NavLink>
             </li>
-            <li className="flex items-center gap-5 px-5 py-4 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all duration-300 ease-in-out">
+            <li className="flex items-center gap-5 px-5 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all duration-300 ease-in-out">
               <span>
                 <IoMdHelp />
               </span>
               <NavLink>Help</NavLink>
             </li>
-            <li className="flex items-center gap-5 px-5 py-4 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all duration-300 ease-in-out">
+            <li className="flex items-center gap-5 px-5 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all duration-300 ease-in-out">
               <span>
                 <IoMdSettings />
               </span>
               <NavLink>Settings</NavLink>
             </li>
 
-            <li onClick={hnadleLogout} className="flex items-center gap-5 px-5 py-4 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all duration-300 ease-in-out">
+            <li onClick={hnadleLogout} className="flex items-center gap-5 px-5 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all duration-300 ease-in-out">
               <span>
                 <RiLogoutCircleRLine />
               </span>
