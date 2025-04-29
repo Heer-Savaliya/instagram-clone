@@ -1,7 +1,7 @@
 import React from "react";
 import FeedCard from "./FeedCard";
 
-const Feed = () => {
+const Feed = ({searchQuery}) => {
   return (
     <div>
       {/* Heading */}
@@ -14,7 +14,7 @@ const Feed = () => {
 
       {/* feed container */}
       <div className="py-3 flex flex-col gap-7">
-        <FeedCard />
+        <FeedCard searchQuery={searchQuery}/>
       </div>
     </div>
   );

@@ -8,7 +8,7 @@ import {  auth,firestore } from '../../firebaseConfig';
 import { getAuth } from "firebase/auth";
 import { query, where, deleteDoc } from "firebase/firestore";
 
-const FeedCard = () => {
+const FeedCard = ({searchQuery}) => {
 
   const [postItems, setPostItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -87,6 +87,11 @@ const FeedCard = () => {
   }) : [];
   
 
+  const filteredPosts = sortedPost.filter((post) =>
+    post.user.fullname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    post.caption?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    post.description?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   
 
 const addToLike = async (item) => {
@@ -146,7 +151,7 @@ const addToLike = async (item) => {
   return (
     <>
 
-    {sortedPost.map(item =>(
+    {filteredPosts.map(item =>(
 
     
       <div key={item.id}

@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { IoMdSearch } from "react-icons/io";
 import { IoAdd } from "react-icons/io5";
 import { AiFillAudio } from "react-icons/ai";
 import { Outlet, useNavigate } from "react-router-dom";
+import { SearchContext } from "../../context/SearchContext";
 
 const CenterPart = () => {
+  const { searchQuery, setSearchQuery} = useContext(SearchContext);
   const navigate =useNavigate();
 
   // Add post navigate
@@ -20,6 +22,12 @@ const CenterPart = () => {
             <IoMdSearch />
             <input
               type="text"
+              value={searchQuery}
+              onChange={(e) => {setSearchQuery(e.target.value);
+                if(window.location.pathname !== "/"){
+                    navigate("/");
+                }
+              }}
               placeholder="Search"
               className="border-none outline-none pl-3 w-full"
             />
