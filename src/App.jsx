@@ -11,6 +11,8 @@ import PrivateRoute from './route/PrivateRoute';
 import AddPost from './pages/AddPost';
 import Profile from './pages/Profile';
 import Favourites from './pages/Favourites';
+import Reels from './pages/Reels';
+import Help from './pages/Help';
 
 
 const App = () => {
@@ -75,6 +77,22 @@ const App = () => {
           element:(
             <PrivateRoute>
               <AddPost />
+            </PrivateRoute>
+          )
+        },
+        {
+          path:"/reels",
+          element:(
+            <PrivateRoute>
+              <Reels />
+            </PrivateRoute>
+          )
+        },
+        {
+          path:"/help",
+          element:(
+            <PrivateRoute>
+              <Help />
             </PrivateRoute>
           )
         },

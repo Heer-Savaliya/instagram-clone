@@ -67,13 +67,13 @@ const Navigation = () => {
               <span>
               <PiVideoFill />
               </span>
-              <NavLink>Reels</NavLink>
+              <NavLink to="/reels">Reels</NavLink>
             </li>
             <li className="flex items-center gap-5 px-5 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all duration-300 ease-in-out">
               <span>
                 <IoMdHelp />
               </span>
-              <NavLink>Help</NavLink>
+              <NavLink to="/help">Help</NavLink>
             </li>
             <li className="flex items-center gap-5 px-5 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all duration-300 ease-in-out">
               <span>
