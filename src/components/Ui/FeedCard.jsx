@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { IoHeartOutline ,IoShareSocialSharp ,IoBookmarksOutline } from "react-icons/io5";
+import { GoHeartFill } from "react-icons/go";
 import { LuMessageCircleHeart } from "react-icons/lu";
 import { BsThreeDots } from "react-icons/bs";
 import { collection, getDoc ,doc, getDocs ,addDoc} from "firebase/firestore";
 import {  auth,firestore } from '../../firebaseConfig';
 import { getAuth } from "firebase/auth";
+import { query, where, deleteDoc } from "firebase/firestore";
 
 const FeedCard = () => {
 
@@ -15,60 +17,63 @@ const FeedCard = () => {
     const fetchPosts = async () => {
       const auth = getAuth();
       const user = auth.currentUser;
-
-      // Check if the user is logged in
+  
       if (!user) {
-        console.log("User is not authenticated.");
+        console.log("User not authenticated.");
         setLoading(false);
-        return; 
+        return;
       }
-
+  
       try {
-        // Fetch posts from Firestore
         const querySnapshot = await getDocs(collection(firestore, "posts"));
-        if (querySnapshot.empty) {
-          console.log("No posts found in Firestore");
-        } else {
-          const postsWithUser = await Promise.all(
-            querySnapshot.docs.map(async (docSnap) => {
-              const postData = docSnap.data();
-              let userData = { fullname: "Unknown", profile: "./images/default_p.jpg" };
-
-              if (postData.user_id) {
-                const userDoc = await getDoc(doc(firestore, "users", postData.user_id));
-                if (userDoc.exists()) {
-                  const userInfo = userDoc.data();
-                  userData = {
-                    fullname: userInfo.fullname || "Unknown",
-                    profile: userInfo.profile || "./images/default_p.jpg",
-                  };
-                }
+  
+        const postsWithUser = await Promise.all(
+          querySnapshot.docs.map(async (docSnap) => {
+            const postData = docSnap.data();
+            let userData = { fullname: "Unknown", profile: "./images/default_p.jpg" };
+            let likedByCurrentUser = false;
+  
+            // Fetch user data
+            if (postData.user_id) {
+              const userDoc = await getDoc(doc(firestore, "users", postData.user_id));
+              if (userDoc.exists()) {
+                const userInfo = userDoc.data();
+                userData = {
+                  fullname: userInfo.fullname || "Unknown",
+                  profile: userInfo.profile || "./images/default_p.jpg",
+                };
               }
-
-              const likeSnapshot = await getDocs(collection(firestore,"posts",docSnap.id,"likes"));
-              const likesCount = likeSnapshot.size;
-              return {
-                id: docSnap.id,
-                ...postData,
-                user: userData,
-                likesCount: likesCount,
-              };
-            })
-          );
-          setPostItems(postsWithUser);
-        }
+            }
+  
+            // Check if the current user liked this post
+            const likeSnapshot = await getDocs(collection(firestore, "posts", docSnap.id, "likes"));
+            likeSnapshot.forEach(doc => {
+              if (doc.data().usrId === user.uid) {
+                likedByCurrentUser = true;
+              }
+            });
+  
+            return {
+              id: docSnap.id,
+              ...postData,
+              user: userData,
+              likesCount: likeSnapshot.size,
+              likedByCurrentUser,
+            };
+          })
+        );
+  
+        setPostItems(postsWithUser);
       } catch (error) {
-        console.error("Error fetching the posts:", error);
+        console.error("Error fetching posts:", error);
       } finally {
         setLoading(false);
       }
     };
-
-
-    
-    
+  
     fetchPosts();
   }, []);
+  
   
   if (loading) {
     return <div>Loading posts...</div>;
@@ -82,36 +87,59 @@ const FeedCard = () => {
   }) : [];
   
 
-  const addToLike = async (item) =>{
-    const user = auth.currentUser;
-    if(!user){
-      console.log("Please log in to like the post");
-      return;
-    }
-    try{
-      await addDoc(collection(firestore,"posts",item.id,"likes"),{
-        usrId:user.uid,
-        likedAt: new Date(),
-      });
+  
 
-      setPostItems(prevItems =>
-        prevItems.map(post =>
-          post.id === item.id
-            ? {
-                ...post,
-                likesCount: post.likesCount + 1,
-                likedByCurrentUser: true,
-              }
-            : post
-        )
-      );
-      console.log("Post liked successfully");
-      
-    }catch(error){
-      console.error("Error adding like : ",error);
-      
-    }
+const addToLike = async (item) => {
+  const user = auth.currentUser;
+  if (!user) {
+    console.log("Please log in to like the post");
+    return;
   }
+
+  const likeRef = collection(firestore, "posts", item.id, "likes");
+  const q = query(likeRef, where("usrId", "==", user.uid));
+  const snapshot = await getDocs(q);
+
+  if (!snapshot.empty) {
+    // User already liked → UNLIKE
+    snapshot.forEach(async (docSnap) => {
+      await deleteDoc(doc(firestore, "posts", item.id, "likes", docSnap.id));
+    });
+
+    setPostItems(prev =>
+      prev.map(post =>
+        post.id === item.id
+          ? {
+              ...post,
+              likesCount: post.likesCount - 1,
+              likedByCurrentUser: false,
+            }
+          : post
+      )
+    );
+    console.log("Post unliked");
+  } else {
+    // User hasn't liked → LIKE
+    await addDoc(likeRef, {
+      usrId: user.uid,
+      likedAt: new Date(),
+    });
+
+    setPostItems(prev =>
+      prev.map(post =>
+        post.id === item.id
+          ? {
+              ...post,
+              likesCount: post.likesCount + 1,
+              likedByCurrentUser: true,
+            }
+          : post
+      )
+    );
+    console.log("Post liked");
+  }
+};
+
 
 
 
@@ -162,7 +190,11 @@ const FeedCard = () => {
           {/* Likes */}
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2 text-gray-600 ">
-              <IoHeartOutline className={`text-xl cursor-pointer ${item.likedByCurrentUser ? "text-red-500" : "text-gray-500"}`} onClick={()=>addToLike(item)}/>
+              {item.likedByCurrentUser ?
+              <GoHeartFill className={"text-xl cursor-pointer text-red-500"} onClick={()=>addToLike(item)}/>
+              :
+              <IoHeartOutline className={"text-xl cursor-pointer text-gray-500"} onClick={()=>addToLike(item)}/>
+            }
               <p className="text-[16px] font-medium">
                 <span className="font-bold">{item.likesCount}</span> Likes
               </p>
