@@ -54,7 +54,7 @@ const Navigation = () => {
               <span>
                 <TbWorldHeart />
               </span>
-              <NavLink>Explore</NavLink>
+              <NavLink to="/explore">Explore</NavLink>
             </li>
 
             <li className="flex items-center gap-5 px-5 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all duration-300 ease-in-out">
@@ -79,7 +79,7 @@ const Navigation = () => {
               <span>
                 <IoMdSettings />
               </span>
-              <NavLink>Settings</NavLink>
+              <NavLink to="/setting">Settings</NavLink>
             </li>
 
             <li onClick={hnadleLogout} className="flex items-center gap-5 px-5 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all duration-300 ease-in-out">
