@@ -41,7 +41,7 @@ const RightPart = ({ isMobile = false, onClose = () => {} }) => {
                 className="w-[50px] rounded-full"
               />
               <div>
-                <h1 className="capitalize font-semibold text-[15px]">
+                <h1 className="capitalize font-semibold text-[12px]">
                   {userData.fullname}
                 </h1>
                 <p className="text-xs">{userData.username}</p>

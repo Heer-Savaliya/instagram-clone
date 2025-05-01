@@ -40,11 +40,11 @@ const Suggestion = () => {
                 className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover"
               />
               <div className="text-sm">
-                <h2 className="font-semibold truncate max-w-[120px] sm:max-w-[150px]">{item.fullname}</h2>
-                <p className="text-xs text-gray-500 truncate max-w-[120px] sm:max-w-[150px]">{item.username}</p>
+                <h2 className="font-semibold truncate text-[12px] capitalize max-w-[120px] sm:max-w-[150px]">{item.fullname}</h2>
+                <p className="text-[10px] text-gray-500 truncate max-w-[120px] sm:max-w-[150px]">{item.username}</p>
               </div>
             </div>
-            <button className="px-3 py-1 text-xs sm:text-sm border border-gray-300 rounded-full bg-gray-100 hover:bg-gray-200 transition">
+            <button className="px-3 py-1 text-xs  border border-gray-300 rounded-full bg-gray-100 hover:bg-gray-200 transition">
               + Follow
             </button>
           </div>

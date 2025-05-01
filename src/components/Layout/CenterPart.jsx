@@ -34,13 +34,18 @@ const CenterPart = () => {
             <AiFillAudio />
           </div>
           {/* Button */}
-          <button onClick={handleAddPost} className="flex items-center gap-3 bg-gradient-to-br from-yellow-500 via-pink-500 to-purple-600 text-white px-4 py-3 rounded-full capitalize text-sm font-semibold">
-          <IoAdd size={20} className="drop-shadow-sm"/> create new post
-          </button>
+          <button
+  onClick={handleAddPost}
+  className="flex items-center gap-2 bg-gradient-to-br from-yellow-500 via-pink-500 to-purple-600 text-white px-4 py-3 rounded-full capitalize text-sm font-semibold"
+>
+  <IoAdd size={20} className="drop-shadow-sm" />
+  <span className="hidden sm:inline text-sm md:text-xs">create new post</span>
+</button>
+
         </div>
 
 
-        <div className="px-15 pt-10">
+        <div className="px-1 lg:px-15 pt-10">
             <Outlet />
         </div>
       </div>

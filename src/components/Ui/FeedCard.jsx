@@ -259,7 +259,7 @@ const FeedCard = ({ searchQuery }) => {
       {filteredPosts.map((item) => (
         <div
           key={item.id}
-          className="w-full max-w-[auto] mx-auto bg-white rounded-[8px] p-2 lg:p-6 flex flex-col gap-4 mb-6 shadow-md"
+          className="w-full max-w-[auto] mx-auto bg- rounded-[8px] p-2 lg:p-6 flex flex-col gap-4 mb-6 shadow-md"
         >
           {/* Profile */}
           <div className="flex justify-between items-center flex-wrap gap-y-2">
@@ -291,50 +291,53 @@ const FeedCard = ({ searchQuery }) => {
           </div>
 
           {/* Reactions */}
-          <div className="flex flex-wrap justify-between items-center gap-3 text-gray-600">
-            <div className="flex items-center gap-2">
-              {item.likedByCurrentUser ? (
-                <GoHeartFill
-                  className="text-xl cursor-pointer text-red-500"
-                  onClick={() => addToLike(item)}
-                />
-              ) : (
-                <IoHeartOutline
-                  className="text-xl cursor-pointer text-gray-500"
-                  onClick={() => addToLike(item)}
-                />
-              )}
-              <p className="text-[15px] sm:text-[16px] font-medium">
-                <span className="font-bold">{item.likesCount}</span> Likes
-              </p>
-            </div>
+          {/* Reactions */}
+<div className="flex flex-wrap justify-between items-center gap-3 text-gray-600">
+  <div className="flex items-center gap-2">
+    {item.likedByCurrentUser ? (
+      <GoHeartFill
+        className="text-xl cursor-pointer text-red-500"
+        onClick={() => addToLike(item)}
+      />
+    ) : (
+      <IoHeartOutline
+        className="text-xl cursor-pointer text-gray-500"
+        onClick={() => addToLike(item)}
+      />
+    )}
+    <p className="hidden sm:block text-[15px] sm:text-[16px] font-medium">
+      <span className="font-bold">{item.likesCount}</span> Likes
+    </p>
+  </div>
 
-            <div className="flex items-center gap-2">
-              <LuMessageCircleHeart
-                className="text-xl cursor-pointer"
-                onClick={() => toggleComments(item.id)}
-              />
+  <div className="flex items-center gap-2">
+    <LuMessageCircleHeart
+      className="text-xl cursor-pointer"
+      onClick={() => toggleComments(item.id)}
+    />
+    <p className="hidden sm:block text-[15px] sm:text-[16px] font-medium">
+      <span className="font-bold">
+        {comments[item.id]?.length || 0}
+      </span>{" "}
+      Comments
+    </p>
+  </div>
 
-              <p className="text-[15px] sm:text-[16px] font-medium">
-                <span className="font-bold">
-                  {comments[item.id]?.length || 0}
-                </span>{" "}
-                Comments
-              </p>
-            </div>
+  <div className="flex items-center gap-2">
+    <IoShareSocialSharp className="text-xl" />
+    <p className="hidden sm:block text-[15px] sm:text-[16px] font-medium">
+      24 Shares
+    </p>
+  </div>
 
-            <div className="flex items-center gap-2">
-              <IoShareSocialSharp className="text-xl" />
-              <p className="text-[15px] sm:text-[16px] font-medium">
-                24 Shares
-              </p>
-            </div>
+  <div className="flex items-center gap-2">
+    <IoBookmarksOutline className="text-xl" />
+    <p className="hidden sm:block text-[15px] sm:text-[16px] font-medium">
+      24 Save
+    </p>
+  </div>
+</div>
 
-            <div className="flex items-center gap-2">
-              <IoBookmarksOutline className="text-xl" />
-              <p className="text-[15px] sm:text-[16px] font-medium">24 Save</p>
-            </div>
-          </div>
 
           {/* Description */}
           <p className="text-xs lg:text-sm text-gray-600">

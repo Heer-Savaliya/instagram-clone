@@ -12,86 +12,98 @@ import UserProfile from "./UserProfile";
 
 const Navigation = () => {
   const navigate = useNavigate();
-  const hnadleLogout = async () =>{
-    try{
+
+  const handleLogout = async () => {
+    try {
       await signOut(auth);
       navigate("/login");
-    }catch(error){
-      console.log("Logout error : ",error);
-      
+    } catch (error) {
+      console.log("Logout error:", error);
     }
   };
 
   return (
-    <>
-      {/* Left Section - 1/3 Width */}
-      <div
-          style={{
-            boxShadow:
-              "0px 5px 10px rgba(0, 0, 0, 0.34)",
-          }}
-        
-        className="w-[15%] h-full fixed left-0 top-0 z-10 bg-white "
-      >
-        <div className="p-5 flex items-center justify-center">
-          <img src="./images/logo.jpg" alt="Logo" className="w-[140px]" />
-        </div>
+    <div
+      style={{ boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.34)" }}
+      className="h-full fixed left-0 top-0 z-10 bg-white w-[45px] lg:w-[220px] transition-all duration-300"
+    >
+      {/* Logo */}
+      <div className="p-3 flex items-center justify-center lg:justify-center">
+  
+  <img
+    src="./images/white_logo.jpg"
+    alt="Small Logo"
+    className="block lg:hidden w-[30px]" // You can adjust width as needed
+  />
 
-          {/* User profile */}
-          <UserProfile/>
+  <img
+    src="./images/logo.jpg"
+    alt="Logo"
+    className="hidden lg:block w-[140px]"
+  />
+</div>
 
-        {/* main nav */}
-        <nav className="!mt-5 text-black font-semibold ">
-          <ul className="">
-            <li className="flex items-center gap-5 px-5 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all duration-300 ease-in-out">
-              <span>
-                <FaHome />
-              </span>
-              <NavLink>Home</NavLink>
-            </li>
 
-            <li className="flex items-center gap-5 px-5 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all duration-300 ease-in-out">
-              <span>
-                <TbWorldHeart />
-              </span>
-              <NavLink to="/explore">Explore</NavLink>
-            </li>
-
-            <li className="flex items-center gap-5 px-5 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all duration-300 ease-in-out">
-              <span>
-                <GrFavorite />
-              </span>
-              <NavLink to="/favourite">My Favourites</NavLink>
-            </li>
-            <li className="flex items-center gap-5 px-5 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all duration-300 ease-in-out">
-              <span>
-              <PiVideoFill />
-              </span>
-              <NavLink to="/reels">Reels</NavLink>
-            </li>
-            <li className="flex items-center gap-5 px-5 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all duration-300 ease-in-out">
-              <span>
-                <IoMdHelp />
-              </span>
-              <NavLink to="/help">Help</NavLink>
-            </li>
-            <li className="flex items-center gap-5 px-5 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all duration-300 ease-in-out">
-              <span>
-                <IoMdSettings />
-              </span>
-              <NavLink to="/setting">Settings</NavLink>
-            </li>
-
-            <li onClick={hnadleLogout} className="flex items-center gap-5 px-5 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all duration-300 ease-in-out">
-              <span>
-                <RiLogoutCircleRLine />
-              </span>
-              <NavLink>Logout</NavLink>
-            </li>
-          </ul>
-        </nav>
+      {/* User Profile */}
+      <div className="hidden lg:block">
+        <UserProfile />
       </div>
-    </>
+
+      {/* Navigation Menu */}
+      <nav className="mt-5 text-black font-semibold">
+        <ul>
+          <li className="flex items-center gap-5 px-3 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all">
+            <FaHome />
+            <NavLink to="/" className="hidden lg:inline">
+              Home
+            </NavLink>
+          </li>
+
+          <li className="flex items-center gap-5 px-3 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all">
+            <TbWorldHeart />
+            <NavLink to="/explore" className="hidden lg:inline">
+              Explore
+            </NavLink>
+          </li>
+
+          <li className="flex items-center gap-5 px-3 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all">
+            <GrFavorite />
+            <NavLink to="/favourite" className="hidden lg:inline">
+              My Favourites
+            </NavLink>
+          </li>
+
+          <li className="flex items-center gap-5 px-3 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all">
+            <PiVideoFill />
+            <NavLink to="/reels" className="hidden lg:inline">
+              Reels
+            </NavLink>
+          </li>
+
+          <li className="flex items-center gap-5 px-3 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all">
+            <IoMdHelp />
+            <NavLink to="/help" className="hidden lg:inline">
+              Help
+            </NavLink>
+          </li>
+
+          <li className="flex items-center gap-5 px-3 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all">
+            <IoMdSettings />
+            <NavLink to="/setting" className="hidden lg:inline">
+              Settings
+            </NavLink>
+          </li>
+
+          <li
+            onClick={handleLogout}
+            className="cursor-pointer flex items-center gap-5 px-3 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all"
+          >
+            <RiLogoutCircleRLine />
+            <span className="hidden lg:inline">Logout</span>
+          </li>
+        </ul>
+      </nav>
+    </div>
   );
 };
 
