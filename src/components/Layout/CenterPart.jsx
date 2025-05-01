@@ -15,7 +15,7 @@ const CenterPart = () => {
   }
   return (
     <>
-      <div className="ml-[15%] w-[60%] mx-auto h-screen overflow-y-auto !p-5">
+      <div className="ml-[15%] w-[80%] mx-auto h-screen overflow-y-auto !p-5">
         <div className="flex items-center justify-center gap-10">
           {/* Search Bar */}
           <div className="flex px-3 py-2 border-2 border-gray-400 rounded-full items-center w-full max-w-[400px]">

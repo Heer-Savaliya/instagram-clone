@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, firestore } from "../firebaseConfig";
-import { addDoc, collection ,doc } from "firebase/firestore";
+import { addDoc, collection } from "firebase/firestore";
 import axios from "axios"; 
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddPost = () => {
   const [error, setError] = useState();
@@ -10,7 +12,7 @@ const AddPost = () => {
 
   const [addPost, setAddPost] = useState({
     caption: "",
-    post: null, 
+    post: null,
     description: "",
   });
 
@@ -44,30 +46,27 @@ const AddPost = () => {
     }
 
     try {
-      // Upload image to Cloudinary
       const formData = new FormData();
       formData.append("file", addPost.post);
-      formData.append("upload_preset", "myuploadpreset"); // Replace with your Cloudinary preset name
+      formData.append("upload_preset", "myuploadpreset");
 
       const cloudinaryResponse = await axios.post(
-        "https://api.cloudinary.com/v1_1/dxctlq87l/image/upload", // Replace 'your_cloud_name'
+        "https://api.cloudinary.com/v1_1/dxctlq87l/image/upload",
         formData
       );
 
       const imageUrl = cloudinaryResponse.data.secure_url;
 
-      const postsCollection = collection(firestore, "posts");
+      await addDoc(collection(firestore, "posts"), {
+        user_id: user.uid,
+        caption: addPost.caption,
+        description: addPost.description,
+        post: imageUrl,
+        createdAt: new Date(),
+      });
 
-    await addDoc(postsCollection, {
-      user_id: user.uid, // store user's ID
-      caption: addPost.caption,
-      description: addPost.description,
-      post: imageUrl,
-      createdAt: new Date(),
-    });
-
-
-      navigate("/"); // Navigate after success
+      toast.success("Post added");
+      navigate("/");
     } catch (err) {
       console.error(err);
       setError("Failed to upload post. Please try again.");
@@ -75,18 +74,19 @@ const AddPost = () => {
   };
 
   return (
-    <div>
-      <div className="shadow-2xl py-10 px-15">
-        <h1 className="text-center pb-5 text-2xl">Add post</h1>
+    <div className="px-4 sm:px-6 md:px-10 py-10">
+      <ToastContainer position="top-right" />
+      <div className="max-w-3xl mx-auto shadow-lg bg-white p-6 sm:p-10 rounded-lg">
+        <h1 className="text-center pb-5 text-2xl font-semibold text-gray-700">Add Post</h1>
 
-        <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-          <div className="flex gap-6 items-center">
-            <div className="flex-1/2">
-              <label htmlFor="caption" className="text-gray-700 capitalize font-serif">
-                Caption:{" "}
+        <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
+          <div className="flex flex-col md:flex-row gap-6">
+            <div className="w-full md:w-1/2">
+              <label htmlFor="caption" className="text-gray-700 capitalize font-medium">
+                Caption
               </label>
               <input
-                className="p-2 mt-1 border-2 w-full border-gray-400 rounded-lg capitalize"
+                className="p-2 mt-1 border border-gray-300 w-full rounded-md focus:outline-none focus:ring focus:ring-purple-300"
                 type="text"
                 name="caption"
                 placeholder="Add caption"
@@ -94,12 +94,13 @@ const AddPost = () => {
                 onChange={handleChange}
               />
             </div>
-            <div className="flex-1/2">
-              <label htmlFor="post" className="text-gray-700 capitalize font-serif">
-                Upload Image:{" "}
+
+            <div className="w-full md:w-1/2">
+              <label htmlFor="post" className="text-gray-700 capitalize font-medium">
+                Upload Image
               </label>
               <input
-                className="p-2 mt-1 border-2 w-full text-gray-500 border-gray-400 rounded-lg capitalize"
+                className="p-2 mt-1 border border-gray-300 w-full rounded-md text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"
                 type="file"
                 name="post"
                 id="post"
@@ -108,27 +109,27 @@ const AddPost = () => {
             </div>
           </div>
 
-          <div className="flex-1/2">
-            <label htmlFor="description" className="text-gray-700 capitalize font-serif">
-              Description:{" "}
+          <div>
+            <label htmlFor="description" className="text-gray-700 capitalize font-medium">
+              Description
             </label>
             <textarea
-              className="p-2 mt-1 border-2 w-full border-gray-400 rounded-lg capitalize"
+              className="p-2 mt-1 border border-gray-300 w-full rounded-md focus:outline-none focus:ring focus:ring-purple-300"
               name="description"
               placeholder="Add description"
               id="description"
-              rows={5}
+              rows={4}
               onChange={handleChange}
             />
           </div>
 
-          {error && <p className="text-red-500">{error}</p>}
+          {error && <p className="text-red-500 text-sm">{error}</p>}
 
           <button
             type="submit"
-            className="w-full cursor-pointer p-3 mb-2 md:mb-4 bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 text-white rounded-md font-semibold shimmer-hover"
+            className="w-full p-3 bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 text-white rounded-md font-semibold hover:opacity-90 transition-all duration-200"
           >
-            Add post
+            Add Post
           </button>
         </form>
       </div>

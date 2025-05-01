@@ -3,6 +3,8 @@ import { collection, query, where, getDocs, deleteDoc,doc } from "firebase/fires
 import { UserContext } from "../../context/UserContext"; // adjust path as needed
 import { firestore } from "../../firebaseConfig";
 import { MdAutoDelete } from "react-icons/md";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AllPost = () => {
   const { userData } = useContext(UserContext);
@@ -26,6 +28,7 @@ const AllPost = () => {
         setPosts(postList);
       } catch (error) {
         console.error("Error fetching user posts:", error);
+        toast.error("Error fetching user posts:", error, { position: "top-right" });
       } finally {
         setLoading(false);
       }
@@ -42,8 +45,9 @@ const AllPost = () => {
     try{
       await deleteDoc(doc(firestore,"posts",postId));
       setPosts(prev => prev.filter(posts => posts.id !== postId));
-      alert("Deleted");
+      toast.success("Deleted");
     }catch(error){
+      toast.error("Error while deleteting post",error, { position: "top-right" });
       console.error("Error while deleteting post : ",error);
       
     }
@@ -51,6 +55,7 @@ const AllPost = () => {
 
   return (
     <div>
+      <ToastContainer position="top-right" />
       <h1 className="text-xl font-bold mb-4">Your Posts</h1>
       {posts.length === 0 ? (
         <p>No posts found.</p>

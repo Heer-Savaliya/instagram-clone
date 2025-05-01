@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   IoHeartOutline,
   IoShareSocialSharp,
@@ -17,14 +17,17 @@ import {
   where,
   deleteDoc,
 } from "firebase/firestore";
-import { auth, firestore } from '../../firebaseConfig';
+import { auth, firestore } from "../../firebaseConfig";
 import { getAuth } from "firebase/auth";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const FeedCard = ({ searchQuery }) => {
   const [postItems, setPostItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [comments, setComments] = useState({});
   const [newComment, setNewComment] = useState({});
+  const [visibleComments, setVisibleComments] = useState({});
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -43,11 +46,16 @@ const FeedCard = ({ searchQuery }) => {
         const postsWithUser = await Promise.all(
           querySnapshot.docs.map(async (docSnap) => {
             const postData = docSnap.data();
-            let userData = { fullname: "Unknown", profile: "./images/default_p.jpg" };
+            let userData = {
+              fullname: "Unknown",
+              profile: "./images/default_p.jpg",
+            };
             let likedByCurrentUser = false;
 
             if (postData.user_id) {
-              const userDoc = await getDoc(doc(firestore, "users", postData.user_id));
+              const userDoc = await getDoc(
+                doc(firestore, "users", postData.user_id)
+              );
               if (userDoc.exists()) {
                 const userInfo = userDoc.data();
                 userData = {
@@ -57,8 +65,10 @@ const FeedCard = ({ searchQuery }) => {
               }
             }
 
-            const likeSnapshot = await getDocs(collection(firestore, "posts", docSnap.id, "likes"));
-            likeSnapshot.forEach(doc => {
+            const likeSnapshot = await getDocs(
+              collection(firestore, "posts", docSnap.id, "likes")
+            );
+            likeSnapshot.forEach((doc) => {
               if (doc.data().usrId === user.uid) {
                 likedByCurrentUser = true;
               }
@@ -78,40 +88,45 @@ const FeedCard = ({ searchQuery }) => {
 
         // Fetch comments for all posts
         const commentsData = {};
-for (let post of postsWithUser) {
-  const commentsSnapshot = await getDocs(collection(firestore, "posts", post.id, "comments"));
-  
-  const commentsWithUser = await Promise.all(
-    commentsSnapshot.docs.map(async (docSnap) => {
-      const commentData = docSnap.data();
-      let userData = { fullname: "Unknown", profile: "./images/default_p.jpg" };
+        for (let post of postsWithUser) {
+          const commentsSnapshot = await getDocs(
+            collection(firestore, "posts", post.id, "comments")
+          );
 
-      if (commentData.usrId) {
-        const userDoc = await getDoc(doc(firestore, "users", commentData.usrId));
-        if (userDoc.exists()) {
-          const userInfo = userDoc.data();
-          userData = {
-            fullname: userInfo.fullname || "Unknown",
-            profile: userInfo.profile || "./images/default_p.jpg",
-          };
+          const commentsWithUser = await Promise.all(
+            commentsSnapshot.docs.map(async (docSnap) => {
+              const commentData = docSnap.data();
+              let userData = {
+                fullname: "Unknown",
+                profile: "./images/default_p.jpg",
+              };
+
+              if (commentData.usrId) {
+                const userDoc = await getDoc(
+                  doc(firestore, "users", commentData.usrId)
+                );
+                if (userDoc.exists()) {
+                  const userInfo = userDoc.data();
+                  userData = {
+                    fullname: userInfo.fullname || "Unknown",
+                    profile: userInfo.profile || "./images/default_p.jpg",
+                  };
+                }
+              }
+
+              return {
+                id: docSnap.id,
+                ...commentData,
+                user: userData,
+              };
+            })
+          );
+
+          commentsData[post.id] = commentsWithUser;
         }
-      }
-
-      return {
-        id: docSnap.id,
-        ...commentData,
-        user: userData,
-      };
-    })
-  );
-
-  commentsData[post.id] = commentsWithUser;
-}
-setComments(commentsData);
-
-
+        setComments(commentsData);
       } catch (error) {
-        console.error("Error fetching posts:", error);
+        toast.error("Error fetching posts:", error);
       } finally {
         setLoading(false);
       }
@@ -124,6 +139,13 @@ setComments(commentsData);
     return <div>Loading posts...</div>;
   }
 
+  const toggleComments = (postId) => {
+    setVisibleComments((prev) => ({
+      ...prev,
+      [postId]: !prev[postId],
+    }));
+  };
+
   const sortedPost = Array.isArray(postItems)
     ? [...postItems].sort((a, b) => {
         if (!a.createdAt || !b.createdAt) return 0;
@@ -131,16 +153,17 @@ setComments(commentsData);
       })
     : [];
 
-  const filteredPosts = sortedPost.filter((post) =>
-    post.user.fullname.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    post.caption?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    post.description?.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredPosts = sortedPost.filter(
+    (post) =>
+      post.user.fullname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      post.caption?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      post.description?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const addToLike = async (item) => {
     const user = auth.currentUser;
     if (!user) {
-      console.log("Please log in to like the post");
+      toast.warn("Please log in to like the post");
       return;
     }
 
@@ -153,33 +176,41 @@ setComments(commentsData);
         await deleteDoc(doc(firestore, "posts", item.id, "likes", docSnap.id));
       });
 
-      setPostItems(prev =>
-        prev.map(post =>
+      setPostItems((prev) =>
+        prev.map((post) =>
           post.id === item.id
-            ? { ...post, likesCount: post.likesCount - 1, likedByCurrentUser: false }
+            ? {
+                ...post,
+                likesCount: post.likesCount - 1,
+                likedByCurrentUser: false,
+              }
             : post
         )
       );
-      console.log("Post unliked");
+      toast.success("Post unliked");
     } else {
       await addDoc(likeRef, {
         usrId: user.uid,
         likedAt: new Date(),
       });
 
-      setPostItems(prev =>
-        prev.map(post =>
+      setPostItems((prev) =>
+        prev.map((post) =>
           post.id === item.id
-            ? { ...post, likesCount: post.likesCount + 1, likedByCurrentUser: true }
+            ? {
+                ...post,
+                likesCount: post.likesCount + 1,
+                likedByCurrentUser: true,
+              }
             : post
         )
       );
-      console.log("Post liked");
+      toast.success("Post liked");
     }
   };
 
   const handleCommentChange = (postId, value) => {
-    setNewComment(prev => ({ ...prev, [postId]: value }));
+    setNewComment((prev) => ({ ...prev, [postId]: value }));
   };
 
   const handleAddComment = async (postId) => {
@@ -195,49 +226,56 @@ setComments(commentsData);
       });
 
       const userDoc = await getDoc(doc(firestore, "users", user.uid));
-let userData = { fullname: "Unknown", profile: "./images/default_p.jpg" };
-if (userDoc.exists()) {
-  const userInfo = userDoc.data();
-  userData = {
-    fullname: userInfo.fullname || "Unknown",
-    profile: userInfo.profile || "./images/default_p.jpg",
-  };
-}
+      let userData = { fullname: "Unknown", profile: "./images/default_p.jpg" };
+      if (userDoc.exists()) {
+        const userInfo = userDoc.data();
+        userData = {
+          fullname: userInfo.fullname || "Unknown",
+          profile: userInfo.profile || "./images/default_p.jpg",
+        };
+      }
 
-setComments(prev => ({
-  ...prev,
-  [postId]: [
-    ...(prev[postId] || []),
-    {
-      usrId: user.uid,
-      comment: newComment[postId],
-      user: userData,
-    }
-  ],
-}));
+      setComments((prev) => ({
+        ...prev,
+        [postId]: [
+          ...(prev[postId] || []),
+          {
+            usrId: user.uid,
+            comment: newComment[postId],
+            user: userData,
+          },
+        ],
+      }));
 
-
-      setNewComment(prev => ({ ...prev, [postId]: "" }));
+      setNewComment((prev) => ({ ...prev, [postId]: "" }));
     } catch (error) {
-      console.error("Failed to add comment", error);
+      toast.error("Failed to add comment", error);
     }
   };
 
   return (
     <>
-      {filteredPosts.map(item => (
+      <ToastContainer position="top-right" />
+      {filteredPosts.map((item) => (
         <div
           key={item.id}
-          style={{ boxShadow: "0 0 10px rgba(0, 0, 0, 0.15)" }}
-          className="w-full bg-white rounded-[8px] p-5 flex gap-4 flex-col mb-6"
+          className="w-full max-w-[auto] mx-auto bg-white rounded-[8px] p-2 lg:p-6 flex flex-col gap-4 mb-6 shadow-md"
         >
           {/* Profile */}
-          <div className="flex justify-between items-center">
-            <div className="flex gap-4">
-              <img src={item.user.profile} alt="" className="w-[45px] rounded-full" />
+          <div className="flex justify-between items-center flex-wrap gap-y-2">
+            <div className="flex gap-4 items-center">
+              <img
+                src={item.user.profile}
+                alt=""
+                className="w-10 h-10 rounded-full object-cover"
+              />
               <div>
-                <h2 className="text-[16px] font-semibold capitalize">{item.user.fullname}</h2>
-                <p className="text-[13px] capitalize text-gray-500 font-medium">{item.caption}</p>
+                <h2 className="text-[15px] sm:text-[16px] font-semibold capitalize">
+                  {item.user.fullname}
+                </h2>
+                <p className="text-[12px] sm:text-[13px] text-gray-500 capitalize">
+                  {item.caption}
+                </p>
               </div>
             </div>
             <BsThreeDots size={20} />
@@ -245,69 +283,104 @@ setComments(prev => ({
 
           {/* Feed Image */}
           <div>
-            <img src={item.post} alt="" className="rounded-[7px] w-full" />
+            <img
+              src={item.post}
+              alt=""
+              className="w-full h-auto rounded-[7px] object-cover"
+            />
           </div>
 
-          {/* Likes */}
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-2 text-gray-600 ">
+          {/* Reactions */}
+          <div className="flex flex-wrap justify-between items-center gap-3 text-gray-600">
+            <div className="flex items-center gap-2">
               {item.likedByCurrentUser ? (
-                <GoHeartFill className="text-xl cursor-pointer text-red-500" onClick={() => addToLike(item)} />
+                <GoHeartFill
+                  className="text-xl cursor-pointer text-red-500"
+                  onClick={() => addToLike(item)}
+                />
               ) : (
-                <IoHeartOutline className="text-xl cursor-pointer text-gray-500" onClick={() => addToLike(item)} />
+                <IoHeartOutline
+                  className="text-xl cursor-pointer text-gray-500"
+                  onClick={() => addToLike(item)}
+                />
               )}
-              <p className="text-[16px] font-medium">
+              <p className="text-[15px] sm:text-[16px] font-medium">
                 <span className="font-bold">{item.likesCount}</span> Likes
               </p>
             </div>
-            <div className="flex items-center gap-2 text-gray-600">
-              <LuMessageCircleHeart className="text-xl" />
-              <p className="text-[16px] font-medium">
-                <span className="font-bold">{comments[item.id]?.length || 0}</span> Comments
+
+            <div className="flex items-center gap-2">
+              <LuMessageCircleHeart
+                className="text-xl cursor-pointer"
+                onClick={() => toggleComments(item.id)}
+              />
+
+              <p className="text-[15px] sm:text-[16px] font-medium">
+                <span className="font-bold">
+                  {comments[item.id]?.length || 0}
+                </span>{" "}
+                Comments
               </p>
             </div>
-            <div className="flex items-center gap-2 text-gray-600">
+
+            <div className="flex items-center gap-2">
               <IoShareSocialSharp className="text-xl" />
-              <p className="text-[16px] font-medium">24 Shares</p>
+              <p className="text-[15px] sm:text-[16px] font-medium">
+                24 Shares
+              </p>
             </div>
-            <div className="flex items-center gap-2 text-gray-600">
+
+            <div className="flex items-center gap-2">
               <IoBookmarksOutline className="text-xl" />
-              <p className="text-[16px] font-medium">24 Save</p>
+              <p className="text-[15px] sm:text-[16px] font-medium">24 Save</p>
             </div>
           </div>
 
           {/* Description */}
-          <div>
-            <p className="text-gray-500 ">{item.description}</p>
-          </div>
+          <p className="text-xs lg:text-sm text-gray-600">
+            {item.description}
+          </p>
 
           {/* Comment Section */}
-          <div className="mt-3">
-            <h3 className="text-sm font-semibold text-gray-700 mb-1">Comments:</h3>
-            {comments[item.id]?.map((cmt, idx) => (
-  <div key={idx} className="flex items-center gap-2 mb-2">
-    <img src={cmt.user.profile} alt="profile" className="w-6 h-6 rounded-full" />
-    <span className="font-semibold text-sm capitalize">{cmt.user.fullname} : </span>
-    <p className="text-gray-600 text-sm">{cmt.comment}</p>
-  </div>
-))}
+          {visibleComments[item.id] && (
+            <div className="mt-3">
+              <h3 className="text-sm font-semibold text-gray-700 mb-1">
+                Comments:
+              </h3>
+              {comments[item.id]?.map((cmt, idx) => (
+                <div
+                  key={idx}
+                  className="flex items-center gap-2 mb-2 flex-wrap"
+                >
+                  <img
+                    src={cmt.user.profile}
+                    alt="profile"
+                    className="w-6 h-6 rounded-full object-cover"
+                  />
+                  <span className="font-semibold text-sm capitalize">
+                    {cmt.user.fullname}:
+                  </span>
+                  <p className="text-gray-600 text-sm">{cmt.comment}</p>
+                </div>
+              ))}
 
-            <div className="mt-2 flex gap-2">
-              <input
-                type="text"
-                value={newComment[item.id] || ""}
-                onChange={(e) => handleCommentChange(item.id, e.target.value)}
-                placeholder="Write a comment..."
-                className="border rounded px-3 py-1 w-full text-sm"
-              />
-              <button
-                onClick={() => handleAddComment(item.id)}
-                className="bg-blue-500 text-white text-sm px-3 py-1 rounded"
-              >
-                Post
-              </button>
+              <div className="mt-2 flex gap-2 flex-wrap sm:flex-nowrap">
+                <input
+                  type="text"
+                  value={newComment[item.id] || ""}
+                  onChange={(e) => handleCommentChange(item.id, e.target.value)}
+                  placeholder="Write a comment..."
+                  className="border rounded px-3 py-1 w-full text-sm"
+                />
+                <button
+                  onClick={() => handleAddComment(item.id)}
+                  className="bg-blue-500 text-white text-sm px-3 py-1 rounded"
+                >
+                  Post
+                </button>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       ))}
     </>
