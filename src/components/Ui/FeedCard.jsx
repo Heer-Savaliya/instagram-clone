@@ -19,233 +19,184 @@ const FeedCard = ({ searchQuery }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      const auth = getAuth();
+    const fetchData = async () => {
       const user = auth.currentUser;
-
       if (!user) {
-        console.log("User not authenticated.");
         setLoading(false);
         return;
       }
 
       try {
-        const querySnapshot = await getDocs(collection(firestore, "posts"));
+        const postDocs = await getDocs(collection(firestore, "posts"));
+        const posts = postDocs.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-        const postsWithUser = await Promise.all(
-          querySnapshot.docs.map(async (docSnap) => {
-            const postData = docSnap.data();
-            let userData = {
-              fullname: "Unknown",
-              profile: "./images/default_p.jpg",
+        const userIds = [...new Set(posts.map(p => p.user_id).filter(Boolean))];
+        const userFetches = await Promise.all(
+          userIds.map(uid => getDoc(doc(firestore, "users", uid)))
+        );
+
+        const userMap = {};
+        userFetches.forEach((docSnap, idx) => {
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            userMap[userIds[idx]] = {
+              fullname: data.fullname || "Unknown",
+              profile: data.profile || "./images/default_p.jpg",
             };
-            let likedByCurrentUser = false;
+          }
+        });
 
-            if (postData.user_id) {
-              const userDoc = await getDoc(
-                doc(firestore, "users", postData.user_id)
-              );
-              if (userDoc.exists()) {
-                const userInfo = userDoc.data();
-                userData = {
-                  fullname: userInfo.fullname || "Unknown",
-                  profile: userInfo.profile || "./images/default_p.jpg",
-                };
-              }
-            }
-
-            const likeSnapshot = await getDocs(
-              collection(firestore, "posts", docSnap.id, "likes")
+        const updatedPosts = await Promise.all(
+          posts.map(async post => {
+            const likesRef = collection(firestore, "posts", post.id, "likes");
+            const likesSnap = await getDocs(likesRef);
+            const likesCount = likesSnap.size;
+            const likedByCurrentUser = likesSnap.docs.some(
+              like => like.data().usrId === user.uid
             );
-            likeSnapshot.forEach((doc) => {
-              if (doc.data().usrId === user.uid) {
-                likedByCurrentUser = true;
-              }
-            });
 
             return {
-              id: docSnap.id,
-              ...postData,
-              user: userData,
-              likesCount: likeSnapshot.size,
+              ...post,
+              user: userMap[post.user_id] || {
+                fullname: "Unknown",
+                profile: "./images/default_p.jpg",
+              },
+              likesCount,
               likedByCurrentUser,
             };
           })
         );
 
-        setPostItems(postsWithUser);
+        setPostItems(updatedPosts);
 
-        // Fetch comments for all posts
-        const commentsData = {};
-        for (let post of postsWithUser) {
-          const commentsSnapshot = await getDocs(
-            collection(firestore, "posts", post.id, "comments")
-          );
-
-          const commentsWithUser = await Promise.all(
-            commentsSnapshot.docs.map(async (docSnap) => {
-              const commentData = docSnap.data();
-              let userData = {
-                fullname: "Unknown",
-                profile: "./images/default_p.jpg",
-              };
-
-              if (commentData.usrId) {
-                const userDoc = await getDoc(
-                  doc(firestore, "users", commentData.usrId)
-                );
-                if (userDoc.exists()) {
-                  const userInfo = userDoc.data();
-                  userData = {
-                    fullname: userInfo.fullname || "Unknown",
-                    profile: userInfo.profile || "./images/default_p.jpg",
-                  };
+        const commentFetches = await Promise.all(
+          updatedPosts.map(async post => {
+            const commentSnap = await getDocs(
+              collection(firestore, "posts", post.id, "comments")
+            );
+            const commentData = await Promise.all(
+              commentSnap.docs.map(async docSnap => {
+                const data = docSnap.data();
+                let userData = { fullname: "Unknown", profile: "./images/default_p.jpg" };
+                if (data.usrId) {
+                  const uDoc = await getDoc(doc(firestore, "users", data.usrId));
+                  if (uDoc.exists()) {
+                    const uInfo = uDoc.data();
+                    userData = {
+                      fullname: uInfo.fullname || "Unknown",
+                      profile: uInfo.profile || "./images/default_p.jpg",
+                    };
+                  }
                 }
-              }
+                return { ...data, user: userData };
+              })
+            );
+            return [post.id, commentData];
+          })
+        );
 
-              return {
-                id: docSnap.id,
-                ...commentData,
-                user: userData,
-              };
-            })
-          );
-
-          commentsData[post.id] = commentsWithUser;
-        }
-        setComments(commentsData);
-      } catch (error) {
-        toast.error("Error fetching posts:", error);
+        const commentsMap = Object.fromEntries(commentFetches);
+        setComments(commentsMap);
+      } catch (err) {
+        console.error(err);
+        toast.error("Error loading feed");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchPosts();
+    fetchData();
   }, []);
 
-  if (loading) {
-    return <div>Loading posts...</div>;
-  }
-
-  const toggleComments = (postId) => {
-    setVisibleComments((prev) => ({
-      ...prev,
-      [postId]: !prev[postId],
-    }));
+  const toggleComments = postId => {
+    setVisibleComments(prev => ({ ...prev, [postId]: !prev[postId] }));
   };
 
-  const sortedPost = Array.isArray(postItems)
-    ? [...postItems].sort((a, b) => {
-        if (!a.createdAt || !b.createdAt) return 0;
-        return b.createdAt.seconds - a.createdAt.seconds;
-      })
-    : [];
+  const sortedPosts = postItems
+    .filter(post => {
+      return (
+        post.user.fullname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        post.caption?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        post.description?.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    })
+    .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
 
-  const filteredPosts = sortedPost.filter(
-    (post) =>
-      post.user.fullname.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      post.caption?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      post.description?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const addToLike = async (item) => {
+  const addToLike = async item => {
     const user = auth.currentUser;
-    if (!user) {
-      toast.warn("Please log in to like the post");
-      return;
-    }
+    if (!user) return toast.warn("Please log in to like the post");
 
     const likeRef = collection(firestore, "posts", item.id, "likes");
     const q = query(likeRef, where("usrId", "==", user.uid));
-    const snapshot = await getDocs(q);
+    const snap = await getDocs(q);
 
-    if (!snapshot.empty) {
-      snapshot.forEach(async (docSnap) => {
-        await deleteDoc(doc(firestore, "posts", item.id, "likes", docSnap.id));
-      });
-
-      setPostItems((prev) =>
-        prev.map((post) =>
-          post.id === item.id
-            ? {
-                ...post,
-                likesCount: post.likesCount - 1,
-                likedByCurrentUser: false,
-              }
-            : post
-        )
-      );
+    if (!snap.empty) {
+      for (let d of snap.docs) {
+        await deleteDoc(doc(firestore, "posts", item.id, "likes", d.id));
+      }
+      updatePost(item.id, -1, false);
       toast.success("Post unliked");
     } else {
-      await addDoc(likeRef, {
-        usrId: user.uid,
-        likedAt: new Date(),
-      });
-
-      setPostItems((prev) =>
-        prev.map((post) =>
-          post.id === item.id
-            ? {
-                ...post,
-                likesCount: post.likesCount + 1,
-                likedByCurrentUser: true,
-              }
-            : post
-        )
-      );
+      await addDoc(likeRef, { usrId: user.uid, likedAt: new Date() });
+      updatePost(item.id, 1, true);
       toast.success("Post liked");
     }
   };
 
-  const handleCommentChange = (postId, value) => {
-    setNewComment((prev) => ({ ...prev, [postId]: value }));
+  const updatePost = (postId, delta, liked) => {
+    setPostItems(prev =>
+      prev.map(p =>
+        p.id === postId
+          ? {
+              ...p,
+              likesCount: p.likesCount + delta,
+              likedByCurrentUser: liked,
+            }
+          : p
+      )
+    );
   };
 
-  const handleAddComment = async (postId) => {
+  const handleAddComment = async postId => {
     const user = auth.currentUser;
-    if (!user || !newComment[postId]) return;
+    const text = newComment[postId];
+    if (!user || !text) return;
 
-    try {
-      const commentRef = collection(firestore, "posts", postId, "comments");
-      await addDoc(commentRef, {
-        usrId: user.uid,
-        comment: newComment[postId],
-        commentedAt: new Date(),
-      });
+    const commentRef = collection(firestore, "posts", postId, "comments");
+    await addDoc(commentRef, {
+      usrId: user.uid,
+      comment: text,
+      commentedAt: new Date(),
+    });
 
-      const userDoc = await getDoc(doc(firestore, "users", user.uid));
-      let userData = { fullname: "Unknown", profile: "./images/default_p.jpg" };
-      if (userDoc.exists()) {
-        const userInfo = userDoc.data();
-        userData = {
-          fullname: userInfo.fullname || "Unknown",
-          profile: userInfo.profile || "./images/default_p.jpg",
-        };
-      }
-
-      setComments((prev) => ({
-        ...prev,
-        [postId]: [
-          ...(prev[postId] || []),
-          {
-            usrId: user.uid,
-            comment: newComment[postId],
-            user: userData,
-          },
-        ],
-      }));
-
-      setNewComment((prev) => ({ ...prev, [postId]: "" }));
-    } catch (error) {
-      toast.error("Failed to add comment", error);
+    const userDoc = await getDoc(doc(firestore, "users", user.uid));
+    let userInfo = {
+      fullname: "Unknown",
+      profile: "./images/default_p.jpg",
+    };
+    if (userDoc.exists()) {
+      const data = userDoc.data();
+      userInfo = {
+        fullname: data.fullname || "Unknown",
+        profile: data.profile || "./images/default_p.jpg",
+      };
     }
+
+    setComments(prev => ({
+      ...prev,
+      [postId]: [...(prev[postId] || []), { comment: text, user: userInfo }],
+    }));
+
+    setNewComment(prev => ({ ...prev, [postId]: "" }));
   };
+
+  if (loading) return <div>Loading posts...</div>;
+
 
   return (
     <>
       <ToastContainer position="top-right" />
-      {filteredPosts.map((item) => (
+      {sortedPosts.map((item) => (
         <div
           key={item.id}
           className="w-full max-w-[auto] mx-auto bg- rounded-[8px] p-2 lg:p-6 flex flex-col gap-4 mb-6 shadow-md"
