@@ -15,6 +15,7 @@ import Help from './pages/Help';
 import { SearchProvider } from './context/SearchContext'; // ✅ IMPORT CONTEXT
 import NotFound from './pages/NotFound';
 import OtherUser from './pages/OtherUser';
+import ForgetPassword from './pages/ForgetPassword';
 
 const App = () => {
   const [loading, setLoading] = useState(true);
@@ -27,6 +28,10 @@ const App = () => {
     {
       path: '/register',
       element: <Registration />
+    },
+    {
+      path: '/forget-password',
+      element: <ForgetPassword />
     },
     {
       path: '/',
