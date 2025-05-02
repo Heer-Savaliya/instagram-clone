@@ -1,26 +1,14 @@
 import React, { useEffect, useState } from "react";
-import {
-  IoHeartOutline,
-  IoShareSocialSharp,
-  IoBookmarksOutline,
-} from "react-icons/io5";
+import {IoHeartOutline,IoShareSocialSharp,IoBookmarksOutline,} from "react-icons/io5";
 import { GoHeartFill } from "react-icons/go";
 import { LuMessageCircleHeart } from "react-icons/lu";
 import { BsThreeDots } from "react-icons/bs";
-import {
-  collection,
-  getDoc,
-  doc,
-  getDocs,
-  addDoc,
-  query,
-  where,
-  deleteDoc,
-} from "firebase/firestore";
+import {collection,getDoc,doc,getDocs,addDoc,query,where,deleteDoc,} from "firebase/firestore";
 import { auth, firestore } from "../../firebaseConfig";
 import { getAuth } from "firebase/auth";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 const FeedCard = ({ searchQuery }) => {
   const [postItems, setPostItems] = useState([]);
@@ -28,6 +16,7 @@ const FeedCard = ({ searchQuery }) => {
   const [comments, setComments] = useState({});
   const [newComment, setNewComment] = useState({});
   const [visibleComments, setVisibleComments] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -263,15 +252,15 @@ const FeedCard = ({ searchQuery }) => {
         >
           {/* Profile */}
           <div className="flex justify-between items-center flex-wrap gap-y-2">
-            <div className="flex gap-4 items-center">
+            <div className="flex gap-4 items-center cursor-pointer" >
               <img
                 src={item.user.profile}
                 alt=""
-                className="w-10 h-10 rounded-full object-cover"
+                className="w-10 h-10 rounded-full object-cover "
               />
               <div>
-                <h2 className="text-[15px] sm:text-[16px] font-semibold capitalize">
-                  {item.user.fullname}
+                <h2 className="text-[15px] sm:text-[16px] font-semibold capitalize" onClick={()=>navigate(`/other-profile/${item.user_id}`)}>
+                  {item.user.fullname} 
                 </h2>
                 <p className="text-[12px] sm:text-[13px] text-gray-500 capitalize">
                   {item.caption}
@@ -292,57 +281,54 @@ const FeedCard = ({ searchQuery }) => {
 
           {/* Reactions */}
           {/* Reactions */}
-<div className="flex flex-wrap justify-between items-center gap-3 text-gray-600">
-  <div className="flex items-center gap-2">
-    {item.likedByCurrentUser ? (
-      <GoHeartFill
-        className="text-xl cursor-pointer text-red-500"
-        onClick={() => addToLike(item)}
-      />
-    ) : (
-      <IoHeartOutline
-        className="text-xl cursor-pointer text-gray-500"
-        onClick={() => addToLike(item)}
-      />
-    )}
-    <p className="hidden sm:block text-[15px] sm:text-[16px] font-medium">
-      <span className="font-bold">{item.likesCount}</span> Likes
-    </p>
-  </div>
+          <div className="flex flex-wrap justify-between items-center gap-3 text-gray-600">
+            <div className="flex items-center gap-2">
+              {item.likedByCurrentUser ? (
+                <GoHeartFill
+                  className="text-xl cursor-pointer text-red-500"
+                  onClick={() => addToLike(item)}
+                />
+              ) : (
+                <IoHeartOutline
+                  className="text-xl cursor-pointer text-gray-500"
+                  onClick={() => addToLike(item)}
+                />
+              )}
+              <p className="hidden sm:block text-[15px] sm:text-[16px] font-medium">
+                <span className="font-bold">{item.likesCount}</span> Likes
+              </p>
+            </div>
 
-  <div className="flex items-center gap-2">
-    <LuMessageCircleHeart
-      className="text-xl cursor-pointer"
-      onClick={() => toggleComments(item.id)}
-    />
-    <p className="hidden sm:block text-[15px] sm:text-[16px] font-medium">
-      <span className="font-bold">
-        {comments[item.id]?.length || 0}
-      </span>{" "}
-      Comments
-    </p>
-  </div>
+            <div className="flex items-center gap-2">
+              <LuMessageCircleHeart
+                className="text-xl cursor-pointer"
+                onClick={() => toggleComments(item.id)}
+              />
+              <p className="hidden sm:block text-[15px] sm:text-[16px] font-medium">
+                <span className="font-bold">
+                  {comments[item.id]?.length || 0}
+                </span>{" "}
+                Comments
+              </p>
+            </div>
 
-  <div className="flex items-center gap-2">
-    <IoShareSocialSharp className="text-xl" />
-    <p className="hidden sm:block text-[15px] sm:text-[16px] font-medium">
-      24 Shares
-    </p>
-  </div>
+            <div className="flex items-center gap-2">
+              <IoShareSocialSharp className="text-xl" />
+              <p className="hidden sm:block text-[15px] sm:text-[16px] font-medium">
+                24 Shares
+              </p>
+            </div>
 
-  <div className="flex items-center gap-2">
-    <IoBookmarksOutline className="text-xl" />
-    <p className="hidden sm:block text-[15px] sm:text-[16px] font-medium">
-      24 Save
-    </p>
-  </div>
-</div>
-
+            <div className="flex items-center gap-2">
+              <IoBookmarksOutline className="text-xl" />
+              <p className="hidden sm:block text-[15px] sm:text-[16px] font-medium">
+                24 Save
+              </p>
+            </div>
+          </div>
 
           {/* Description */}
-          <p className="text-xs lg:text-sm text-gray-600">
-            {item.description}
-          </p>
+          <p className="text-xs lg:text-sm text-gray-600">{item.description}</p>
 
           {/* Comment Section */}
           {visibleComments[item.id] && (

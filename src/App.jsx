@@ -14,6 +14,7 @@ import Reels from './pages/Reels';
 import Help from './pages/Help';
 import { SearchProvider } from './context/SearchContext'; // ✅ IMPORT CONTEXT
 import NotFound from './pages/NotFound';
+import OtherUser from './pages/OtherUser';
 
 const App = () => {
   const [loading, setLoading] = useState(true);
@@ -33,6 +34,7 @@ const App = () => {
       children: [
         { path: "/", element: <PrivateRoute><Home /></PrivateRoute> },
         { path: "/profile", element: <PrivateRoute><Profile /></PrivateRoute> },
+        { path: "/other-profile:id", element: <PrivateRoute><OtherUser /></PrivateRoute> },
         { path: "/favourite", element: <PrivateRoute><Favourites /></PrivateRoute> },
         { path: "/message", element: <PrivateRoute><Message /></PrivateRoute> },
         { path: "/add-post", element: <PrivateRoute><AddPost /></PrivateRoute> },
