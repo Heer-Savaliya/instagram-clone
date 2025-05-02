@@ -17,7 +17,7 @@ const AllPost = () => {
 
       try {
         const postsRef = collection(firestore, "posts");
-        const q = query(postsRef, where("user_id", "==", userData.user_id)); // assuming userId is stored in each post
+        const q = query(postsRef, where("user_id", "==", userData.user_id)); 
         const querySnapshot = await getDocs(q);
 
         const postList = querySnapshot.docs.map(doc => ({

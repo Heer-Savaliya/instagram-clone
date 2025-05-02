@@ -34,7 +34,7 @@ const App = () => {
       children: [
         { path: "/", element: <PrivateRoute><Home /></PrivateRoute> },
         { path: "/profile", element: <PrivateRoute><Profile /></PrivateRoute> },
-        { path: "/other-profile:id", element: <PrivateRoute><OtherUser /></PrivateRoute> },
+        { path: "/other-profile/:id", element: <PrivateRoute><OtherUser /></PrivateRoute> },
         { path: "/favourite", element: <PrivateRoute><Favourites /></PrivateRoute> },
         { path: "/message", element: <PrivateRoute><Message /></PrivateRoute> },
         { path: "/add-post", element: <PrivateRoute><AddPost /></PrivateRoute> },

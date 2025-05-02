@@ -33,7 +33,7 @@ const Navigation = () => {
   <img
     src="./images/white_logo.jpg"
     alt="Small Logo"
-    className="block lg:hidden w-[30px]" // You can adjust width as needed
+    className="block lg:hidden w-[30px]" 
   />
 
   <img

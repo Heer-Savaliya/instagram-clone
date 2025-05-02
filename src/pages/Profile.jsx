@@ -4,11 +4,36 @@ import { IoBookmarksOutline } from "react-icons/io5";
 import { UserContext } from "../context/UserContext";
 import { PiVideoLight } from "react-icons/pi";
 import AllPost from "../components/Ui/AllPost";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { firestore } from "../firebaseConfig";
+
 
 const Profile = () => {
     const { userData, loading } = useContext(UserContext);
+    const [postCount, setPostCount] = useState(0);
+
 
   if (loading || !userData) return <p>Loading profile...</p>;
+  useEffect(() => {
+    const fetchPostCount = async () => {
+      if (!userData || !userData.user_id) return;
+  
+      try {
+        const q = query(
+          collection(firestore, "posts"),
+          where("user_id", "==", userData.user_id)
+        );
+        const snapshot = await getDocs(q);
+        setPostCount(snapshot.size);
+      } catch (error) {
+        console.error("Error fetching post count:", error);
+      }
+    };
+  
+    fetchPostCount();
+  }, [userData]);
+  
   return (
     <div>
       <div className="flex  items-center gap-10">
@@ -21,13 +46,13 @@ const Profile = () => {
         </div>
         <div className="flex flex-col gap-3 w-[300px] ">
           <div>
-            <h1 className="font-semibold text-xl ">{userData.fullname}</h1>
+            <h1 className="font-semibold text-xl capitalize">{userData.fullname}</h1>
             <p className="italic text-gray-600">{userData.username}</p>
           </div>
           <div className="flex items-center justify-between text-center ">
             <div>
               <h1 className="font-semibold">Posts</h1>
-              <p className="text-gray-600 ">5</p>
+              <p className="text-gray-600 ">{postCount}</p>
             </div>
             <div>
               <h1 className="font-semibold">Followers</h1>

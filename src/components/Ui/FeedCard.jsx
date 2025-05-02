@@ -252,14 +252,23 @@ const FeedCard = ({ searchQuery }) => {
         >
           {/* Profile */}
           <div className="flex justify-between items-center flex-wrap gap-y-2">
-            <div className="flex gap-4 items-center cursor-pointer" >
+            <div className="flex gap-4 items-center cursor-pointer"
+            onClick={() => {
+              const currentUser = auth.currentUser;
+              if (currentUser && currentUser.uid === item.user_id) {
+                navigate("/profile");
+              } else {
+                navigate(`/other-profile/${item.user_id}`);
+              }
+            }}
+            >
               <img
                 src={item.user.profile}
                 alt=""
                 className="w-10 h-10 rounded-full object-cover "
               />
               <div>
-                <h2 className="text-[15px] sm:text-[16px] font-semibold capitalize" onClick={()=>navigate(`/other-profile/${item.user_id}`)}>
+                <h2 className="text-[15px] sm:text-[16px] font-semibold capitalize">
                   {item.user.fullname} 
                 </h2>
                 <p className="text-[12px] sm:text-[13px] text-gray-500 capitalize">
