@@ -23,7 +23,6 @@ const ForgotPassword = () => {
       expiresAt: expiry,
     });
 
-    // You should use an email service like EmailJS/SendGrid here
     alert(`OTP : ${otp}`);
     toast.success("OTP sent to your email (console.log for now)");
     setServerOtp(otp);

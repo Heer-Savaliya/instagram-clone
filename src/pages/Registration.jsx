@@ -38,17 +38,17 @@ const Registration = () => {
     const { fullname, username, email, phone, password, profile } = formData;
   
     try {
-      // Create user authentication
+      
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
   
       // Upload image to Cloudinary
       const formData = new FormData();
       formData.append("file", profile);
-      formData.append("upload_preset", "myuploadpreset"); // Make sure this matches your preset
+      formData.append("upload_preset", "myuploadpreset"); 
   
       const cloudinaryResponse = await axios.post(
-        "https://api.cloudinary.com/v1_1/dxctlq87l/image/upload", // Replace with your actual Cloudinary cloud name
+        "https://api.cloudinary.com/v1_1/dxctlq87l/image/upload", 
         formData
       );
   

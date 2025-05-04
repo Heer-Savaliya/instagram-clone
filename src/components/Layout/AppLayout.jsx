@@ -9,7 +9,6 @@ const AppLayout = () => {
 
   return (
     <div className="w-full bg-white relative">
-      {/* Mobile Top Menu Icon */}
       <div className="lg:hidden fixed top-4 right-4 z-50">
         <button
           onClick={() => setIsRightOpen(true)}
@@ -26,13 +25,12 @@ const AppLayout = () => {
         {/* Center Section */}
         <CenterPart />
 
-        {/* Right Section (Desktop only) */}
+        {/* Right Section */}
         <div className="hidden lg:block w-[25%]">
           <RightPart />
         </div>
       </div>
 
-      {/* Right Section (Mobile Overlay) */}
       {isRightOpen && (
         <RightPart isMobile={true} onClose={() => setIsRightOpen(false)} />
       )}
