@@ -8,7 +8,7 @@ import { PiVideoLight } from "react-icons/pi";
 import ParticularUserPost from "../components/Ui/ParticularUserPost";
 
 const OtherUser = () => {
-  const { id } = useParams(); // ✅ FIXED here
+  const { id } = useParams(); 
   const [userData, setUserData] = useState(null);
   const [postCount, setPostCount] = useState(0);
 
@@ -94,7 +94,7 @@ return (
           </div>
         </div>
 
-        {/* grid */}
+        
         <div className="mt-7">
           <div className="flex items-center justify-center gap-10 font-bold text-6xl">
             <hr className="w-full text-gray-400" />

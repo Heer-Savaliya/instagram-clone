@@ -6,13 +6,12 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { SearchContext } from "../../context/SearchContext";
 
 const CenterPart = () => {
-  const { searchQuery, setSearchQuery} = useContext(SearchContext);
-  const navigate =useNavigate();
+  const { searchQuery, setSearchQuery } = useContext(SearchContext);
+  const navigate = useNavigate();
 
-  // Add post navigate
-  const handleAddPost=()=>{
+  const handleAddPost = () => {
     navigate("./add-post");
-  }
+  };
   return (
     <>
       <div className="ml-[15%] w-[80%] mx-auto h-screen overflow-y-auto !p-5">
@@ -23,9 +22,10 @@ const CenterPart = () => {
             <input
               type="text"
               value={searchQuery}
-              onChange={(e) => {setSearchQuery(e.target.value);
-                if(window.location.pathname !== "/"){
-                    navigate("/");
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                if (window.location.pathname !== "/") {
+                  navigate("/");
                 }
               }}
               placeholder="Search"
@@ -33,20 +33,20 @@ const CenterPart = () => {
             />
             <AiFillAudio />
           </div>
-          {/* Button */}
-          <button
-  onClick={handleAddPost}
-  className="flex items-center gap-2 bg-gradient-to-br from-yellow-500 via-pink-500 to-purple-600 text-white px-4 py-3 rounded-full capitalize text-sm font-semibold"
->
-  <IoAdd size={20} className="drop-shadow-sm" />
-  <span className="hidden sm:inline text-sm md:text-xs">create new post</span>
-</button>
 
+          <button
+            onClick={handleAddPost}
+            className="flex items-center gap-2 bg-gradient-to-br from-yellow-500 via-pink-500 to-purple-600 text-white px-4 py-3 rounded-full capitalize text-sm font-semibold"
+          >
+            <IoAdd size={20} className="drop-shadow-sm" />
+            <span className="hidden sm:inline text-sm md:text-xs">
+              create new post
+            </span>
+          </button>
         </div>
 
-
         <div className="px-1 lg:px-15 pt-10">
-            <Outlet />
+          <Outlet />
         </div>
       </div>
     </>
