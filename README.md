@@ -34,3 +34,4 @@ A fully responsive Instagram-like social media application built using React and
 ├── .env               # Firebase config variables (not committed)
 ├── package.json
 └── README.md
+        
