@@ -12,10 +12,12 @@ import Profile from './pages/Profile';
 import Favourites from './pages/Favourites';
 import Reels from './pages/Reels';
 import Help from './pages/Help';
-import { SearchProvider } from './context/SearchContext'; // ✅ IMPORT CONTEXT
+import { SearchProvider } from './context/SearchContext'; 
 import NotFound from './pages/NotFound';
 import OtherUser from './pages/OtherUser';
 import ForgetPassword from './pages/ForgetPassword';
+import EditProfile from './pages/EditProfile';
+import Setting from './pages/Setting';
 
 const App = () => {
   const [loading, setLoading] = useState(true);
@@ -45,6 +47,8 @@ const App = () => {
         { path: "/add-post", element: <PrivateRoute><AddPost /></PrivateRoute> },
         { path: "/reels", element: <PrivateRoute><Reels /></PrivateRoute> },
         { path: "/help", element: <PrivateRoute><Help /></PrivateRoute> },
+        { path: "/setting", element: <PrivateRoute><Setting /></PrivateRoute> },
+        { path: "/edit-profile", element: <PrivateRoute><EditProfile /></PrivateRoute> },
         { path: "*", element: <PrivateRoute><NotFound /></PrivateRoute> },
       ]
     }

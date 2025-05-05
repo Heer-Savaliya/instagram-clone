@@ -7,6 +7,7 @@ import AllPost from "../components/Ui/AllPost";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { firestore } from "../firebaseConfig";
+import { NavLink } from "react-router-dom";
 
 
 const Profile = () => {
@@ -64,7 +65,7 @@ const Profile = () => {
             </div>
           </div>
         <div className="flex items-center justify-between gap-6">
-            <button className="border-2 py-1 border-gray-300 w-full rounded-[10px] text-[12px]">Edit Profile</button>
+            <button className="border-2 py-1 border-gray-300 w-full rounded-[10px] text-[12px]"><NavLink to="/edit-profile">Edit Profile</NavLink></button>
             <button className="border-2 py-1 border-gray-300 w-full rounded-[10px] text-[12px]">Share Profile</button>
         </div>
         </div>
