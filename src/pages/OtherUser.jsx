@@ -48,7 +48,7 @@ useEffect(() => {
     };
   
     fetchPostCount();
-  }, [userData]);
+  }, [userData]);   // other user profile
 
 return (
   <div>

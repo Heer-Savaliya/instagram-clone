@@ -44,7 +44,7 @@ const ParticularUserPost = ({userData}) => {
           {posts.map((post) => (
             <div key={post.id} className=" rounded-2xl">
               <img
-                src={post.post} // assuming post has imageUrl field
+                src={post.post}
                 alt="Post"
                 className="rounded-2xl object-cover w-full h-52 transition-transform duration-300 group-hover:scale-105"
               />

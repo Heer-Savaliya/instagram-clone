@@ -22,12 +22,12 @@ export const UserProvider = ({ children }) => {
           console.error('Error fetching user data:', error);
         }
       } else {
-        setUserData(null); // No user logged in
+        setUserData(null);
       }
-      setLoading(false); // After auth state is known
+      setLoading(false); 
     });
 
-    return () => unsubscribe(); // Clean up listener
+    return () => unsubscribe(); //clean up
   }, []);
 
   return (

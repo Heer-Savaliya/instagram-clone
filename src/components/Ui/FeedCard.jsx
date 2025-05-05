@@ -239,7 +239,7 @@ const FeedCard = ({ searchQuery }) => {
             />
           </div>
 
-          {/* Reactions */}
+          
           {/* Reactions */}
           <div className="flex flex-wrap justify-between items-center gap-3 text-gray-600">
             <div className="flex items-center gap-2">

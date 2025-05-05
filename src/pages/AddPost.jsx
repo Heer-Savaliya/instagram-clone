@@ -51,7 +51,7 @@ const AddPost = () => {
       formData.append("upload_preset", "myuploadpreset");
 
       const cloudinaryResponse = await axios.post(
-        "https://api.cloudinary.com/v1_1/dxctlq87l/image/upload",
+        "https://api.cloudinary.com/v1_1/dxctlq87l/image/upload",   //upload to cloudinary
         formData
       );
 

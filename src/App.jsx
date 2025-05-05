@@ -61,7 +61,7 @@ const App = () => {
     loading
       ? <Loader />
       : (
-        <SearchProvider> {/* ✅ WRAP YOUR ROUTER HERE */}
+        <SearchProvider>
           <RouterProvider router={router} />
         </SearchProvider>
       )

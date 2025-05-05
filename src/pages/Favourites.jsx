@@ -29,7 +29,7 @@ const Favourites = () => {
           }
         }
 
-        setLikedPosts(likedPostsArray);
+        setLikedPosts(likedPostsArray);   //fetching fav posts
       } catch (error) {
         console.error("Error fetching favourite posts:", error);
       } finally {
