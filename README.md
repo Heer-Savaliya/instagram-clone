@@ -1,12 +1,36 @@
-# React + Vite
+# Heer Insta Clone
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A fully responsive Instagram-like social media application built using React and Firebase. Users can post images, like and comment on posts, and view others' posts in real time.
 
-Currently, two official plugins are available:
+🌐 [Live Demo](https://heer-insta-clone.netlify.app/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## Expanding the ESLint configuration
+- 🔐 User Authentication (Login/Signup)
+- 📸 Upload and share photos
+- 💬 Like and comment on posts
+- 👥 View other users' posts
+- 🧠 Real-time updates with Firebase Firestore
+- 🔄 Responsive design (Mobile & Desktop friendly)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠 Tech Stack
+
+- **Frontend**: React.js, Tailwind CSS (or CSS Modules, depending on your setup)
+- **Backend**: Firebase (Authentication, Firestore, Storage)
+- **Deployment**: Netlify
+
+## 📁 Folder Structure
+
+```bash
+/heer-insta-clone/
+│
+├── public/             # Static files
+├── src/
+│   ├── components/     # Reusable React components (e.g., Feed, Post, Navbar)
+│   ├── pages/          # Main pages (Home, Login, Signup, Profile)
+│   ├── firebase.js     # Firebase configuration and initialization
+│   └── App.js          # App routing and layout
+│
+├── .env               # Firebase config variables (not committed)
+├── package.json
+└── README.md
