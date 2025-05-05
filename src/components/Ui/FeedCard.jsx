@@ -157,6 +157,14 @@ const FeedCard = ({ searchQuery }) => {
     );
   };
 
+  const handleCommentChange = (postId, value) => {
+    setNewComment(prev => ({
+      ...prev,
+      [postId]: value,
+    }));
+  };
+  
+
   const handleAddComment = async postId => {
     const user = auth.currentUser;
     const text = newComment[postId];
@@ -239,7 +247,6 @@ const FeedCard = ({ searchQuery }) => {
             />
           </div>
 
-          
           {/* Reactions */}
           <div className="flex flex-wrap justify-between items-center gap-3 text-gray-600">
             <div className="flex items-center gap-2">
