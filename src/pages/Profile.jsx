@@ -65,7 +65,7 @@ const Profile = () => {
             </div>
           </div>
         <div className="flex items-center justify-between gap-6">
-            <button className="border-2 py-1 border-gray-300 w-full rounded-[10px] text-[12px]"><NavLink to="/edit-profile">Edit Profile</NavLink></button>
+            <button className="border-2 py-1 border-gray-300 w-full rounded-[10px] text-[12px]"><NavLink to="/edit-profile" >Edit Profile</NavLink></button>
             <button className="border-2 py-1 border-gray-300 w-full rounded-[10px] text-[12px]">Share Profile</button>
         </div>
         </div>
