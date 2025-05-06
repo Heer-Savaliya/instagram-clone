@@ -52,42 +52,42 @@ const Navigation = () => {
       {/* Navigation Menu */}
       <nav className="mt-5 text-black font-semibold">
         <ul>
-          <li className="flex items-center gap-5 px-3 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all">
+          <li onClick={()=>navigate("/")} className="flex items-center gap-5 px-3 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all">
             <FaHome />
             <NavLink to="/" className="hidden lg:inline">
               Home
             </NavLink>
           </li>
 
-          <li className="flex items-center gap-5 px-3 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all">
+          <li onClick={()=>navigate("/explore")}  className="flex items-center gap-5 px-3 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all">
             <TbWorldHeart />
             <NavLink to="/explore" className="hidden lg:inline">
               Explore
             </NavLink>
           </li>
 
-          <li className="flex items-center gap-5 px-3 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all">
+          <li onClick={()=>navigate("/favourite")} className="flex items-center gap-5 px-3 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all">
             <GrFavorite />
             <NavLink to="/favourite" className="hidden lg:inline">
               My Favourites
             </NavLink>
           </li>
 
-          <li className="flex items-center gap-5 px-3 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all">
+          <li onClick={()=>navigate("/reels")} className="flex items-center gap-5 px-3 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all">
             <PiVideoFill />
             <NavLink to="/reels" className="hidden lg:inline">
               Reels
             </NavLink>
           </li>
 
-          <li className="flex items-center gap-5 px-3 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all">
+          <li onClick={()=>navigate("/help")} className="flex items-center gap-5 px-3 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all">
             <IoMdHelp />
             <NavLink to="/help" className="hidden lg:inline">
               Help
             </NavLink>
           </li>
 
-          <li className="flex items-center gap-5 px-3 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all">
+          <li onClick={()=>navigate("/setting")} className="flex items-center gap-5 px-3 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all">
             <IoMdSettings />
             <NavLink to="/setting" className="hidden lg:inline">
               Settings
