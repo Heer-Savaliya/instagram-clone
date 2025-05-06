@@ -3,10 +3,11 @@ import { FaPaperPlane } from "react-icons/fa";
 import { IoMenu } from "react-icons/io5";
 import { MdNotificationsActive } from "react-icons/md";
 import Suggestion from "../Ui/Suggestion";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
 
 const RightPart = ({ isMobile = false, onClose = () => {} }) => {
+  const navigate = useNavigate();
   const { userData, loading } = useContext(UserContext);
   if (loading || !userData) return <p>Loading...</p>;
 
@@ -34,11 +35,11 @@ const RightPart = ({ isMobile = false, onClose = () => {} }) => {
         <div className="mx-2 mt-10">
           <h1 className="my-5 text-md capitalize font-semibold">Profile</h1>
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 cursor-pointer" onClick={()=>navigate("/profile")}>
               <img
                 src={userData.profile}
                 alt="user"
-                className="w-[50px] rounded-full"
+                className="w-[50px] rounded-full "
               />
               <div>
                 <h1 className="capitalize font-semibold text-[12px]">

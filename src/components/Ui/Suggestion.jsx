@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { auth, firestore } from '../../firebaseConfig';
+import { useNavigate } from "react-router-dom";
 
 const Suggestion = () => {
   const [users, setUsers] = useState([]);
+  const navigate =useNavigate();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -33,7 +35,7 @@ const Suggestion = () => {
       <div className="flex flex-col gap-4">
         {users.map(item => (
           <div key={item.id} className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 cursor-pointer" onClick={()=>navigate(`/other-profile/${item.user_id}`)}>
               <img
                 src={item.profile}
                 alt="profile"
