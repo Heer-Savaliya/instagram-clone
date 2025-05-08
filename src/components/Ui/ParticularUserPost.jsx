@@ -40,7 +40,7 @@ const ParticularUserPost = ({userData}) => {
       {posts.length === 0 ? (
         <p>No posts found.</p>
       ) : (
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {posts.map((post) => (
             <div key={post.id} className=" rounded-2xl">
               <img

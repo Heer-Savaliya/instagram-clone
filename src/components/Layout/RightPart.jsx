@@ -49,7 +49,7 @@ const RightPart = ({ isMobile = false, onClose = () => {} }) => {
               </div>
             </div>
             <div>
-              <button className="px-5 py-0.5 border-2 border-gray-300 rounded-4xl text-[12px] bg-gray-100">
+              <button className="hidden sm:block px-5 py-0.5 border-2 border-gray-300 rounded-4xl text-[12px] bg-gray-100">
                 <NavLink to="/add-post">+ Add Post</NavLink>
               </button>
             </div>

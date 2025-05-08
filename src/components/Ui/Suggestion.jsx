@@ -51,9 +51,10 @@ const Suggestion = () => {
                 <p className="text-[10px] text-gray-500 truncate max-w-[120px] sm:max-w-[150px]">{item.username}</p>
               </div>
             </div>
-            <button className="px-3 py-1 text-xs  border border-gray-300 rounded-full bg-gray-100 hover:bg-gray-200 transition">
-              + Follow
-            </button>
+            <button className="hidden sm:block px-3 py-1 text-xs border border-gray-300 rounded-full bg-gray-100 hover:bg-gray-200 transition">
+  + Follow
+</button>
+
           </div>
         ))}
       </div>
