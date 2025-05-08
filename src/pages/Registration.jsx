@@ -11,6 +11,7 @@ import axios from "axios";
 const Registration = () => {
   const [error,setError]=useState();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [formData,setFormData]=useState({
     fullname: "",
     username: "",
@@ -35,6 +36,7 @@ const Registration = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // start loading
     const { fullname, username, email, phone, password, profile } = formData;
   
     try {
@@ -68,6 +70,8 @@ const Registration = () => {
       navigate("/login");
     } catch (err) {
       setError(err.message);
+    }finally{
+      setLoading(false); // stop loading
     }
   };
   
@@ -80,6 +84,13 @@ const Registration = () => {
           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius rerum ut voluptate quos in eum nisi consectetur itaque earum id laborum, molestiae sapiente .</p>
         </div>
         
+        {loading && (
+  <div className="fixed inset-0 bg-white bg-opacity-80 z-50 flex items-center justify-center">
+    <img src="./images/loader.gif" alt="Loading..." className="" />
+  </div>
+)}
+
+
       {error && <p className="text-center py-4 font-semibold text-red-500">{error}</p>}
         <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
           {/* Row 1 */}
