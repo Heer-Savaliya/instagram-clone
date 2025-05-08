@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs ,query ,limit } from "firebase/firestore";
 import { auth, firestore } from '../../firebaseConfig';
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const Suggestion = () => {
   const [users, setUsers] = useState([]);
@@ -15,7 +15,9 @@ const Suggestion = () => {
         return;
       }
       try {
-        const querySnapshot = await getDocs(collection(firestore, "users"));
+        const usersColletion = collection(firestore,"users");
+        const q = query(usersColletion,limit(8));
+        const querySnapshot = await getDocs(q);
         const userArray = querySnapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data()
@@ -30,7 +32,10 @@ const Suggestion = () => {
 
   return (
     <div className="px-4 mt-8 w-full">
-      <h1 className="text-base font-semibold mb-4">Suggestions</h1>
+      <div className="mb-4 flex items-center justify-between">
+      <h1 className="text-base font-semibold">Suggestions</h1>
+      <p className="text-xs text-blue-500 underline cursor-pointer"><NavLink to="/all-users">Show more</NavLink></p>
+      </div>
 
       <div className="flex flex-col gap-4">
         {users.map(item => (

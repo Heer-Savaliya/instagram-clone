@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { SearchProvider } from './context/SearchContext'; 
 import Login from './pages/Login';
 import Registration from './pages/Registration';
 import AppLayout from './components/Layout/AppLayout';
@@ -12,12 +13,12 @@ import Profile from './pages/Profile';
 import Favourites from './pages/Favourites';
 import Reels from './pages/Reels';
 import Help from './pages/Help';
-import { SearchProvider } from './context/SearchContext'; 
 import NotFound from './pages/NotFound';
 import OtherUser from './pages/OtherUser';
 import ForgetPassword from './pages/ForgetPassword';
 import EditProfile from './pages/EditProfile';
 import Setting from './pages/Setting';
+import AllUsers from './pages/AllUsers';
 
 const App = () => {
   const [loading, setLoading] = useState(true);
@@ -49,6 +50,7 @@ const App = () => {
         { path: "/help", element: <PrivateRoute><Help /></PrivateRoute> },
         { path: "/setting", element: <PrivateRoute><Setting /></PrivateRoute> },
         { path: "/edit-profile", element: <PrivateRoute><EditProfile /></PrivateRoute> },
+        { path: "/all-users", element: <PrivateRoute><AllUsers /></PrivateRoute> },
         { path: "*", element: <PrivateRoute><NotFound /></PrivateRoute> },
       ]
     }
