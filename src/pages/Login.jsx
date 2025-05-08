@@ -38,7 +38,7 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-[#F8F5F8] flex justify-center items-center">
-      <div className="bg-white mx-10 p-2 md:p-7 rounded-lg shadow-none md:shadow-lg w-full max-w-5xl flex items-center gap-3 md:gap-8">
+      <div className="bg-white mx-10 px-10 p-2 md:p-7 rounded-lg shadow-none md:shadow-lg w-full max-w-5xl flex items-center gap-3 md:gap-8">
         {/* Image Slider */}
         <div className="w-[300px] h-[450px] lg:w-[420px] lg:h-[550px] hidden md:block  overflow-hidden rounded-3xl relative">
           <img
