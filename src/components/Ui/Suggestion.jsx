@@ -16,7 +16,7 @@ const Suggestion = () => {
       }
       try {
         const usersColletion = collection(firestore,"users");
-        const q = query(usersColletion,limit(8));
+        const q = query(usersColletion,limit(7));
         const querySnapshot = await getDocs(q);
         const userArray = querySnapshot.docs.map(doc => ({
           id: doc.id,

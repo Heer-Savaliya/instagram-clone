@@ -45,7 +45,7 @@ const Favourites = () => {
   }
 
   return (
-    <div className="p-5">
+    <div className="">
       <h1 className="text-xl font-bold mb-4">Favourites</h1>
       {likedPosts.length === 0 ? (
         <p>No favourites found.</p>

@@ -45,7 +45,7 @@ const CenterPart = () => {
           </button>
         </div>
 
-        <div className="px-1 lg:px-15 pt-10">
+        <div className="px-auto lg:px-15 w-full pt-10">
           <Outlet />
         </div>
       </div>
