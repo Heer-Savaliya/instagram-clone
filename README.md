@@ -32,11 +32,11 @@ A fully responsive Instagram-like social media application built using React and
    git clone https://github.com/Heer-Savaliya/instagram-clone.git
    cd heer-insta-clone
    
-2. ** Install dependencies **
+2. ** Install dependencies**
     ```bash
     npm install
 
-3. **Run the development server **
+3. **Run the development server**
     ```bash
     npm start
 
