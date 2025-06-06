@@ -1,9 +1,22 @@
 import React, { useEffect, useState } from "react";
-import {IoHeartOutline,IoShareSocialSharp,IoBookmarksOutline,} from "react-icons/io5";
+import {
+  IoHeartOutline,
+  IoShareSocialSharp,
+  IoBookmarksOutline,
+} from "react-icons/io5";
 import { GoHeartFill } from "react-icons/go";
 import { LuMessageCircleHeart } from "react-icons/lu";
 import { BsThreeDots } from "react-icons/bs";
-import {collection,getDoc,doc,getDocs,addDoc,query,where,deleteDoc,} from "firebase/firestore";
+import {
+  collection,
+  getDoc,
+  doc,
+  getDocs,
+  addDoc,
+  query,
+  where,
+  deleteDoc,
+} from "firebase/firestore";
 import { auth, firestore } from "../../firebaseConfig";
 import { getAuth } from "firebase/auth";
 import { toast, ToastContainer } from "react-toastify";
@@ -28,11 +41,16 @@ const FeedCard = ({ searchQuery }) => {
 
       try {
         const postDocs = await getDocs(collection(firestore, "posts"));
-        const posts = postDocs.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const posts = postDocs.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
 
-        const userIds = [...new Set(posts.map(p => p.user_id).filter(Boolean))];
+        const userIds = [
+          ...new Set(posts.map((p) => p.user_id).filter(Boolean)),
+        ];
         const userFetches = await Promise.all(
-          userIds.map(uid => getDoc(doc(firestore, "users", uid)))
+          userIds.map((uid) => getDoc(doc(firestore, "users", uid)))
         );
 
         const userMap = {};
@@ -47,12 +65,12 @@ const FeedCard = ({ searchQuery }) => {
         });
 
         const updatedPosts = await Promise.all(
-          posts.map(async post => {
+          posts.map(async (post) => {
             const likesRef = collection(firestore, "posts", post.id, "likes");
             const likesSnap = await getDocs(likesRef);
             const likesCount = likesSnap.size;
             const likedByCurrentUser = likesSnap.docs.some(
-              like => like.data().usrId === user.uid
+              (like) => like.data().usrId === user.uid
             );
 
             return {
@@ -70,16 +88,21 @@ const FeedCard = ({ searchQuery }) => {
         setPostItems(updatedPosts);
 
         const commentFetches = await Promise.all(
-          updatedPosts.map(async post => {
+          updatedPosts.map(async (post) => {
             const commentSnap = await getDocs(
               collection(firestore, "posts", post.id, "comments")
             );
             const commentData = await Promise.all(
-              commentSnap.docs.map(async docSnap => {
+              commentSnap.docs.map(async (docSnap) => {
                 const data = docSnap.data();
-                let userData = { fullname: "Unknown", profile: "./images/default_p.jpg" };
+                let userData = {
+                  fullname: "Unknown",
+                  profile: "./images/default_p.jpg",
+                };
                 if (data.usrId) {
-                  const uDoc = await getDoc(doc(firestore, "users", data.usrId));
+                  const uDoc = await getDoc(
+                    doc(firestore, "users", data.usrId)
+                  );
                   if (uDoc.exists()) {
                     const uInfo = uDoc.data();
                     userData = {
@@ -108,12 +131,12 @@ const FeedCard = ({ searchQuery }) => {
     fetchData();
   }, []);
 
-  const toggleComments = postId => {
-    setVisibleComments(prev => ({ ...prev, [postId]: !prev[postId] }));
+  const toggleComments = (postId) => {
+    setVisibleComments((prev) => ({ ...prev, [postId]: !prev[postId] }));
   };
 
   const sortedPosts = postItems
-    .filter(post => {
+    .filter((post) => {
       return (
         post.user.fullname.toLowerCase().includes(searchQuery.toLowerCase()) ||
         post.caption?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -122,7 +145,7 @@ const FeedCard = ({ searchQuery }) => {
     })
     .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
 
-  const addToLike = async item => {
+  const addToLike = async (item) => {
     const user = auth.currentUser;
     if (!user) return toast.warn("Please log in to like the post");
 
@@ -144,8 +167,8 @@ const FeedCard = ({ searchQuery }) => {
   };
 
   const updatePost = (postId, delta, liked) => {
-    setPostItems(prev =>
-      prev.map(p =>
+    setPostItems((prev) =>
+      prev.map((p) =>
         p.id === postId
           ? {
               ...p,
@@ -158,14 +181,13 @@ const FeedCard = ({ searchQuery }) => {
   };
 
   const handleCommentChange = (postId, value) => {
-    setNewComment(prev => ({
+    setNewComment((prev) => ({
       ...prev,
       [postId]: value,
     }));
   };
-  
 
-  const handleAddComment = async postId => {
+  const handleAddComment = async (postId) => {
     const user = auth.currentUser;
     const text = newComment[postId];
     if (!user || !text) return;
@@ -190,16 +212,15 @@ const FeedCard = ({ searchQuery }) => {
       };
     }
 
-    setComments(prev => ({
+    setComments((prev) => ({
       ...prev,
       [postId]: [...(prev[postId] || []), { comment: text, user: userInfo }],
     }));
 
-    setNewComment(prev => ({ ...prev, [postId]: "" }));
+    setNewComment((prev) => ({ ...prev, [postId]: "" }));
   };
 
   if (loading) return <div>Loading posts...</div>;
-
 
   return (
     <>
@@ -211,15 +232,16 @@ const FeedCard = ({ searchQuery }) => {
         >
           {/* Profile */}
           <div className="flex justify-between items-center flex-wrap gap-y-2">
-            <div className="flex gap-4 items-center cursor-pointer"
-            onClick={() => {
-              const currentUser = auth.currentUser;
-              if (currentUser && currentUser.uid === item.user_id) {
-                navigate("/profile");
-              } else {
-                navigate(`/other-profile/${item.user_id}`);
-              }
-            }}
+            <div
+              className="flex gap-4 items-center cursor-pointer"
+              onClick={() => {
+                const currentUser = auth.currentUser;
+                if (currentUser && currentUser.uid === item.user_id) {
+                  navigate("/profile");
+                } else {
+                  navigate(`/other-profile/${item.user_id}`);
+                }
+              }}
             >
               <img
                 src={item.user.profile}
@@ -228,7 +250,7 @@ const FeedCard = ({ searchQuery }) => {
               />
               <div>
                 <h2 className="text-[15px] sm:text-[16px] font-semibold capitalize">
-                  {item.user.fullname} 
+                  {item.user.fullname}
                 </h2>
                 <p className="text-[12px] sm:text-[13px] text-gray-500 capitalize">
                   {item.caption}

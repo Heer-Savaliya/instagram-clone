@@ -5,9 +5,10 @@
   scrollbar-color: #cfcdcd #f3f4f6;
 }
 
-.bg_gray{
+.bg_gray {
   background-color: rgb(248, 248, 248);
 }
+
 @layer utilities {
   .shimmer-hover {
     position: relative;
@@ -21,12 +22,10 @@
     left: -75%;
     width: 50%;
     height: 100%;
-    background: linear-gradient(
-      120deg,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0.4) 50%,
-      rgba(255, 255, 255, 0) 100%
-    );
+    background: linear-gradient(120deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.4) 50%,
+        rgba(255, 255, 255, 0) 100%);
     transform: skewX(-20deg);
   }
 
@@ -45,9 +44,11 @@
 ::-webkit-scrollbar {
   width: 8px;
 }
+
 ::-webkit-scrollbar-track {
   background: #f3f4f6;
 }
+
 ::-webkit-scrollbar-thumb {
   background-color: #ec4899;
   border-radius: 10px;
@@ -60,10 +61,12 @@
 
 .scrollbar-hide {
   -ms-overflow-style: none;
-  scrollbar-width: none; 
+  scrollbar-width: none;
 }
 
-button,a,li{
+button,
+a,
+li {
   cursor: pointer;
 }
 

@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import Navigation from './Navigation';
-import CenterPart from './CenterPart';
-import RightPart from './RightPart';
-import { IoMenu } from 'react-icons/io5';
+import React, { useState } from "react";
+import Navigation from "./Navigation";
+import CenterPart from "./CenterPart";
+import RightPart from "./RightPart";
+import { IoMenu } from "react-icons/io5";
 
 const AppLayout = () => {
   const [isRightOpen, setIsRightOpen] = useState(false);

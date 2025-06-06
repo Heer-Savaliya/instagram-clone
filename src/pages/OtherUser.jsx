@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { doc, getDoc, collection, getDocs, query, where } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  collection,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import { firestore } from "../firebaseConfig";
 import { LuGrid2X2Check } from "react-icons/lu";
 import { IoBookmarksOutline } from "react-icons/io5";
@@ -67,15 +74,21 @@ const OtherUser = () => {
               </div>
               <div className="flex items-center justify-between text-center">
                 <div>
-                  <h1 className="font-semibold text-[13px] md:text-base">Posts</h1>
+                  <h1 className="font-semibold text-[13px] md:text-base">
+                    Posts
+                  </h1>
                   <p className="text-gray-600 text-xs">{postCount}</p>
                 </div>
                 <div>
-                  <h1 className="font-semibold text-[13px] md:text-base">Followers</h1>
+                  <h1 className="font-semibold text-[13px] md:text-base">
+                    Followers
+                  </h1>
                   <p className="text-gray-600 text-xs">137</p>
                 </div>
                 <div>
-                  <h1 className="font-semibold text-[13px] md:text-base">Following</h1>
+                  <h1 className="font-semibold text-[13px] md:text-base">
+                    Following
+                  </h1>
                   <p className="text-gray-600 text-xs">284</p>
                 </div>
               </div>

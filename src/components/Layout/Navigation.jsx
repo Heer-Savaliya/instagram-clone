@@ -29,21 +29,18 @@ const Navigation = () => {
     >
       {/* Logo */}
       <div className="p-3 flex items-center justify-center lg:justify-center">
-  
-  <img
-    src="./images/white_logo.jpg"
-    alt="Small Logo"
-    className="block lg:hidden w-[30px]" 
-  />
+        <img
+          src="./images/white_logo.jpg"
+          alt="Small Logo"
+          className="block lg:hidden w-[30px]"
+        />
 
-  <img
-    src="./images/logo.jpg"
-    alt="Logo"
-    className="hidden lg:block w-[140px]"
-  />
-</div>
-
-
+        <img
+          src="./images/logo.jpg"
+          alt="Logo"
+          className="hidden lg:block w-[140px]"
+        />
+      </div>
       {/* User Profile */}
       <div className="hidden lg:block">
         <UserProfile />
@@ -52,42 +49,60 @@ const Navigation = () => {
       {/* Navigation Menu */}
       <nav className="mt-5 text-black font-semibold">
         <ul>
-          <li onClick={()=>navigate("/")} className="flex items-center gap-5 px-3 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all">
+          <li
+            onClick={() => navigate("/")}
+            className="flex items-center gap-5 px-3 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all"
+          >
             <FaHome />
             <NavLink to="/" className="hidden lg:inline">
               Home
             </NavLink>
           </li>
 
-          <li onClick={()=>navigate("/explore")}  className="flex items-center gap-5 px-3 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all">
+          <li
+            onClick={() => navigate("/explore")}
+            className="flex items-center gap-5 px-3 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all"
+          >
             <TbWorldHeart />
             <NavLink to="/explore" className="hidden lg:inline">
               Explore
             </NavLink>
           </li>
 
-          <li onClick={()=>navigate("/favourite")} className="flex items-center gap-5 px-3 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all">
+          <li
+            onClick={() => navigate("/favourite")}
+            className="flex items-center gap-5 px-3 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all"
+          >
             <GrFavorite />
             <NavLink to="/favourite" className="hidden lg:inline">
               My Favourites
             </NavLink>
           </li>
 
-          <li onClick={()=>navigate("/reels")} className="flex items-center gap-5 px-3 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all">
+          <li
+            onClick={() => navigate("/reels")}
+            className="flex items-center gap-5 px-3 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all"
+          >
             <PiVideoFill />
             <NavLink to="/reels" className="hidden lg:inline">
               Reels
             </NavLink>
           </li>
 
-          <li onClick={()=>navigate("/help")} className="flex items-center gap-5 px-3 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all">
+          <li
+            onClick={() => navigate("/help")}
+            className="flex items-center gap-5 px-3 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all"
+          >
             <IoMdHelp />
             <NavLink to="/help" className="hidden lg:inline">
               Help
             </NavLink>
           </li>
 
-          <li onClick={()=>navigate("/setting")} className="flex items-center gap-5 px-3 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all">
+          <li
+            onClick={() => navigate("/setting")}
+            className="flex items-center gap-5 px-3 py-3 hover:bg-pink-50 hover:text-pink-500 hover:border-l-4 hover:border-pink-500 transition-all"
+          >
             <IoMdSettings />
             <NavLink to="/setting" className="hidden lg:inline">
               Settings

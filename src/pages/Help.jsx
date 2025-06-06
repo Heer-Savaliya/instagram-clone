@@ -1,5 +1,10 @@
-import React from 'react';
-import { FaQuestionCircle, FaShieldAlt, FaLock, FaEnvelope } from 'react-icons/fa';
+import React from "react";
+import {
+  FaQuestionCircle,
+  FaShieldAlt,
+  FaLock,
+  FaEnvelope,
+} from "react-icons/fa";
 
 const Help = () => {
   return (
@@ -11,7 +16,9 @@ const Help = () => {
         <div className="bg-white shadow-md p-5 rounded-xl">
           <div className="flex items-center gap-3 mb-3">
             <FaQuestionCircle className=" text-2xl" />
-            <h2 className="text-xl font-semibold">Frequently Asked Questions</h2>
+            <h2 className="text-xl font-semibold">
+              Frequently Asked Questions
+            </h2>
           </div>
           <ul className="list-disc list-inside text-gray-700 text-sm">
             <li>How do I reset my password?</li>
@@ -27,7 +34,8 @@ const Help = () => {
             <h2 className="text-xl font-semibold">Privacy & Safety</h2>
           </div>
           <p className="text-gray-700 text-sm">
-            Learn about how we protect your data and how you can stay safe while using our app.
+            Learn about how we protect your data and how you can stay safe while
+            using our app.
           </p>
         </div>
 
@@ -38,7 +46,8 @@ const Help = () => {
             <h2 className="text-xl font-semibold">Account Security</h2>
           </div>
           <p className="text-gray-700 text-sm">
-            Tips on keeping your account secure, enabling 2FA, and recognizing suspicious activity.
+            Tips on keeping your account secure, enabling 2FA, and recognizing
+            suspicious activity.
           </p>
         </div>
 

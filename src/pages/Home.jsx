@@ -1,16 +1,16 @@
-import React, { useContext } from 'react'
-import Feed from '../components/Ui/Feed'
-import Status from '../components/Ui/Status'
-import { SearchContext } from '../context/SearchContext'
+import React, { useContext } from "react";
+import Feed from "../components/Ui/Feed";
+import Status from "../components/Ui/Status";
+import { SearchContext } from "../context/SearchContext";
 
 const Home = () => {
-  const {searchQuery} =useContext(SearchContext);
+  const { searchQuery } = useContext(SearchContext);
   return (
     <div>
       <Status />
-      <Feed searchQuery={searchQuery}/>
+      <Feed searchQuery={searchQuery} />
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

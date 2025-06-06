@@ -9,17 +9,15 @@ import { useEffect, useState } from "react";
 import { firestore } from "../firebaseConfig";
 import { NavLink } from "react-router-dom";
 
-
 const Profile = () => {
-    const { userData, loading } = useContext(UserContext);
-    const [postCount, setPostCount] = useState(0);
-
+  const { userData, loading } = useContext(UserContext);
+  const [postCount, setPostCount] = useState(0);
 
   if (loading || !userData) return <p>Loading profile...</p>;
   useEffect(() => {
     const fetchPostCount = async () => {
       if (!userData || !userData.user_id) return;
-  
+
       try {
         const q = query(
           collection(firestore, "posts"),
@@ -31,10 +29,10 @@ const Profile = () => {
         console.error("Error fetching post count:", error);
       }
     };
-  
+
     fetchPostCount();
   }, [userData]);
-  
+
   return (
     <div>
       <div className="flex  items-center gap-10">
@@ -47,7 +45,9 @@ const Profile = () => {
         </div>
         <div className="flex flex-col gap-3 w-[300px] ">
           <div>
-            <h1 className="font-semibold text-xl capitalize">{userData.fullname}</h1>
+            <h1 className="font-semibold text-xl capitalize">
+              {userData.fullname}
+            </h1>
             <p className="italic text-gray-600">{userData.username}</p>
           </div>
           <div className="flex items-center justify-between text-center ">
@@ -64,21 +64,25 @@ const Profile = () => {
               <p className="text-gray-600">284</p>
             </div>
           </div>
-        <div className="flex items-center justify-between gap-6">
-            <button className="border-2 py-1 border-gray-300 w-full rounded-[10px] text-[12px]"><NavLink to="/edit-profile" >Edit Profile</NavLink></button>
-            <button className="border-2 py-1 border-gray-300 w-full rounded-[10px] text-[12px]">Share Profile</button>
-        </div>
+          <div className="flex items-center justify-between gap-6">
+            <button className="border-2 py-1 border-gray-300 w-full rounded-[10px] text-[12px]">
+              <NavLink to="/edit-profile">Edit Profile</NavLink>
+            </button>
+            <button className="border-2 py-1 border-gray-300 w-full rounded-[10px] text-[12px]">
+              Share Profile
+            </button>
+          </div>
         </div>
       </div>
 
       {/* grid */}
       <div className="mt-7">
         <div className="flex items-center justify-center gap-10 font-bold text-6xl">
-            <hr className="w-full text-gray-400"/>
-        <LuGrid2X2Check />
-        <IoBookmarksOutline />
-        <PiVideoLight />
-        <hr className="w-full text-gray-400"/>
+          <hr className="w-full text-gray-400" />
+          <LuGrid2X2Check />
+          <IoBookmarksOutline />
+          <PiVideoLight />
+          <hr className="w-full text-gray-400" />
         </div>
       </div>
 

@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, firestore } from "../firebaseConfig";
 import { addDoc, collection } from "firebase/firestore";
-import axios from "axios"; 
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddPost = () => {
   const [error, setError] = useState();
@@ -51,7 +51,7 @@ const AddPost = () => {
       formData.append("upload_preset", "myuploadpreset");
 
       const cloudinaryResponse = await axios.post(
-        "https://api.cloudinary.com/v1_1/dxctlq87l/image/upload",   //upload to cloudinary
+        "https://api.cloudinary.com/v1_1/dxctlq87l/image/upload", //upload to cloudinary
         formData
       );
 
@@ -77,12 +77,17 @@ const AddPost = () => {
     <div className="px-4 sm:px-6 md:px-10 py-10">
       <ToastContainer position="top-right" />
       <div className="max-w-3xl mx-auto shadow-lg bg-white p-6 sm:p-10 rounded-lg">
-        <h1 className="text-center pb-5 text-2xl font-semibold text-gray-700">Add Post</h1>
+        <h1 className="text-center pb-5 text-2xl font-semibold text-gray-700">
+          Add Post
+        </h1>
 
         <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
           <div className="flex flex-col md:flex-row gap-6">
             <div className="w-full md:w-1/2">
-              <label htmlFor="caption" className="text-gray-700 capitalize font-medium">
+              <label
+                htmlFor="caption"
+                className="text-gray-700 capitalize font-medium"
+              >
                 Caption
               </label>
               <input
@@ -96,7 +101,10 @@ const AddPost = () => {
             </div>
 
             <div className="w-full md:w-1/2">
-              <label htmlFor="post" className="text-gray-700 capitalize font-medium">
+              <label
+                htmlFor="post"
+                className="text-gray-700 capitalize font-medium"
+              >
                 Upload Image
               </label>
               <input
@@ -110,7 +118,10 @@ const AddPost = () => {
           </div>
 
           <div>
-            <label htmlFor="description" className="text-gray-700 capitalize font-medium">
+            <label
+              htmlFor="description"
+              className="text-gray-700 capitalize font-medium"
+            >
               Description
             </label>
             <textarea

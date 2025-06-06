@@ -1,7 +1,7 @@
-import React, { createContext, useEffect, useState } from 'react';
-import { auth, firestore } from '../firebaseConfig';
-import { onAuthStateChanged } from 'firebase/auth';
-import { getDoc, doc } from 'firebase/firestore';
+import React, { createContext, useEffect, useState } from "react";
+import { auth, firestore } from "../firebaseConfig";
+import { onAuthStateChanged } from "firebase/auth";
+import { getDoc, doc } from "firebase/firestore";
 
 export const UserContext = createContext();
 
@@ -13,18 +13,18 @@ export const UserProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         try {
-          const userRef = doc(firestore, 'users', user.uid);
+          const userRef = doc(firestore, "users", user.uid);
           const userSnap = await getDoc(userRef);
           if (userSnap.exists()) {
             setUserData(userSnap.data());
           }
         } catch (error) {
-          console.error('Error fetching user data:', error);
+          console.error("Error fetching user data:", error);
         }
       } else {
         setUserData(null);
       }
-      setLoading(false); 
+      setLoading(false);
     });
 
     return () => unsubscribe(); //clean up

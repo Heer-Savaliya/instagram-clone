@@ -154,7 +154,7 @@ const Status = () => {
           <h5 className="text-xs font-semibold text-gray-600 capitalize">
             Henu
           </h5>
-        </div>  
+        </div>
 
         {/* Add more statuses here if you want */}
       </div>

@@ -9,7 +9,7 @@ const firebaseConfig = {
   projectId: "insta-clone-3903d",
   storageBucket: "insta-clone-3903d.firebasestorage.app",
   messagingSenderId: "715549363755",
-  appId: "1:715549363755:web:a74377288f7596eb5b246e"
+  appId: "1:715549363755:web:a74377288f7596eb5b246e",
 };
 
 // Initialize Firebase
@@ -20,4 +20,4 @@ const auth = getAuth(app);
 const firestore = getFirestore(app);
 const storage = getStorage(app);
 
-export { auth, firestore,storage };
+export { auth, firestore, storage };

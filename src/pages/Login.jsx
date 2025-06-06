@@ -18,23 +18,22 @@ const Login = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit=async(e) =>{
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    try{
-      await signInWithEmailAndPassword(auth,email,password);
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
       navigate("/");
-    }catch(err){
+    } catch (err) {
       setError(err.message);
     }
-  }
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImage((prev) => (prev + 1) % images.length);
-    }, 3000); 
+    }, 3000);
     return () => clearInterval(interval);
   }, []);
-
 
   return (
     <div className="min-h-screen bg-[#F8F5F8] flex justify-center items-center">
@@ -64,7 +63,7 @@ const Login = () => {
                   value={email}
                   placeholder="Email"
                   className="w-full p-3 border-none rounded-md bg-white focus:outline-none"
-                  onChange={(e)=>setEmail(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
             </div>
@@ -76,12 +75,16 @@ const Login = () => {
                   value={password}
                   placeholder="Password"
                   className="w-full p-3 border-none rounded-md bg-white focus:outline-none"
-                  onChange={(e)=>setPassword(e.target.value)}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
             </div>
 
-            {error && <p className="text-center text-sm font-semibold text-red-500">{error}</p>}
+            {error && (
+              <p className="text-center text-sm font-semibold text-red-500">
+                {error}
+              </p>
+            )}
             <button
               type="submit"
               className="w-full p-3 mb-2 md:mb-4 bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 text-white rounded-md font-semibold shimmer-hover"
@@ -102,7 +105,10 @@ const Login = () => {
           </button>
 
           <div className="text-center mb-3 md:mb-6">
-            <NavLink to="/forget-password" className="text-sm text-blue-500 hover:underline">
+            <NavLink
+              to="/forget-password"
+              className="text-sm text-blue-500 hover:underline"
+            >
               Forgot password?
             </NavLink>
           </div>
@@ -110,7 +116,10 @@ const Login = () => {
           <div className="text-center">
             <span className="text-sm text-gray-500">
               Don't have an account?{" "}
-              <NavLink to="/register" className="text-sm text-blue-500 hover:underline">
+              <NavLink
+                to="/register"
+                className="text-sm text-blue-500 hover:underline"
+              >
                 Sign up
               </NavLink>
             </span>

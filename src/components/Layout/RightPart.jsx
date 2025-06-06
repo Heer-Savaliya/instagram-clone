@@ -13,10 +13,13 @@ const RightPart = ({ isMobile = false, onClose = () => {} }) => {
 
   return (
     <div
-  className={`fixed right-0 top-0 h-full z-50 bg-white shadow-lg transition-transform duration-300 ease-in-out
-    ${isMobile ? "w-[70%] sm:w-[60%] md:w-[40%] translate-x-0" : "hidden lg:block w-[20%]"}`}
->
-
+      className={`fixed right-0 top-0 h-full z-50 bg-white shadow-lg transition-transform duration-300 ease-in-out
+    ${
+      isMobile
+        ? "w-[70%] sm:w-[60%] md:w-[40%] translate-x-0"
+        : "hidden lg:block w-[20%]"
+    }`}
+    >
       <div className="p-5">
         {/* Header Icons */}
         <div className="flex items-center justify-between">
@@ -35,7 +38,10 @@ const RightPart = ({ isMobile = false, onClose = () => {} }) => {
         <div className="mx-2 mt-10">
           <h1 className="my-5 text-md capitalize font-semibold">Profile</h1>
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 cursor-pointer" onClick={()=>navigate("/profile")}>
+            <div
+              className="flex items-center gap-2 cursor-pointer"
+              onClick={() => navigate("/profile")}
+            >
               <img
                 src={userData.profile}
                 alt="user"

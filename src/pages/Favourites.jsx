@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from "react";
 import { collection, getDocs, getDoc, doc } from "firebase/firestore";
-import { UserContext } from '../context/UserContext';
+import { UserContext } from "../context/UserContext";
 import { firestore } from "../firebaseConfig";
 
 const Favourites = () => {
@@ -29,7 +29,7 @@ const Favourites = () => {
           }
         }
 
-        setLikedPosts(likedPostsArray);   //fetching fav posts
+        setLikedPosts(likedPostsArray); //fetching fav posts
       } catch (error) {
         console.error("Error fetching favourite posts:", error);
       } finally {
